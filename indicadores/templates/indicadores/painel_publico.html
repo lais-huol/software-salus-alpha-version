@@ -1,0 +1,91 @@
+{% extends super_template|default:"base.html" %}
+{% load static widgets crispy_forms_tags crispy_forms_utils crispy_forms_field crispy_forms_filters i18n base_tags %}
+
+{% block conteudo %}
+    <div class="card-box d-print-none">
+        <div class="row justify-content-md-center">
+            <div class="col-md-auto">
+{#                <h3>Boletim epidemiológico</h3>#}
+                <form id="filtro_mapa">
+                    <div class="form-group">
+                        {% if voltar %}
+                            <input type="button" value="Voltar" class="btn btn-secondary" onclick="window.history.go(-1); return false;">
+                        {% endif %}
+                        {% if filtro %}
+                        <label class="control-label">Semana de investigação</label>
+                        <input id="input_semana" type="text" value="{{ semana_atual }}" name="semana_para"
+                               data-bts-min="0"
+                               data-bts-max="52" data-bts-init-val="" data-bts-step="1" data-bts-decimal="0"
+                               data-bts-step-interval="100" data-bts-force-step-divisibility="round"
+                               data-bts-step-interval-delay="500" data-bts-prefix="" data-bts-postfix=""
+                               data-bts-prefix-extra-class="" data-bts-postfix-extra-class=""
+                               data-bts-booster="true" data-bts-boostat="10" data-bts-max-boosted-step="false"
+                               data-bts-mousewheel="true" data-bts-button-down-class="btn btn-default"
+                               data-bts-button-up-class="btn btn-default"/>
+                        <input type="button" id='botao_filtrar' value="Filtrar" class="btn btn-primary"/>
+                        {% endif %}
+                        <a class="btn btn-info" href="{% url 'api:publica_microdados' %}">Baixar microdados</a>
+                        <input type="button" value="Imprimir" class="btn btn-secondary" onclick="window.print(); return false;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% autoescape off %}
+        {{ boletim }}
+    {% endautoescape %}
+
+    <br/>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/leaflet.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/highcharts.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/mapa.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'libs/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" type="text/css"/>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+{% endblock %}
+{% block scripts %}
+{#    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>#}
+{#    <script src="https://code.highcharts.com/stock/highstock.js"></script>#}
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/highstock.js' %}"></script>
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/highcharts-3d.js' %}"></script>
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/highcharts-more.js' %}"></script>
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/indicators/indicators.js' %}"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+    <script src="{% static 'js/Highcharts-8.1.2/modules/exporting.js' %}"></script>
+    <script src="{% static 'js/Highcharts-8.1.2/modules/export-data.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/heatmap.min.js' %}"></script>
+    <script src="{% static 'js/leaflet_heatmap.js' %}"></script>
+    <script src="{% static 'js/leaflet-image.js' %}"></script>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <script src="{% static 'js/Natal_Bairros.js' %}"></script>
+    <script src="{% static 'js/sample_data.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+
+    {% autoescape off %}
+        {% for script in scripts %}
+            {{ script|safe }}
+        {% endfor %}
+        <script>
+            $(function() {
+                $('[data-async="true"]').each(function (i, el) {
+                    $.ajax('{% url 'indicadores:painel_publico_indicador_ajax' %}', {
+                        data: {
+                            indicador: el.id,
+                        }
+                    }).done(function (response) {
+                        splt = response.split('<script>');
+                        el.outerHTML = splt[0];
+                        $('head').append('<script>'+splt[1]);
+                    })
+                });
+            });
+        </script>
+    {% endautoescape %}
+{% endblock %}

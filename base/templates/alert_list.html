@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load base_tags %}
+
+{% block conteudo %}
+    <h2>Alertas</h2>
+    {% if object_list.exists %}
+        <ul class="list-group">
+            {% for obj in object_list %}
+                {% with action_url=obj|notification_action_url %}
+                    <li class="list-group-item">
+                        {% if action_url %}
+                            <a href="{{ action_url }}" class="mr-2"><i class="fa fa-fw fa-search"></i> ver</a>
+                        {% endif %}
+                        <strong style="font-weight: bold;">{{ obj|notification_actor_title }}</strong> <i class="fa fa-fw fa-angle-right"></i>
+                        {{ obj.verb }}
+                        <span class="badge badge-light" class="text-muted">há {{ obj.timestamp|timesince }}</span>
+                        <a href="#" data-url="{% url 'notifications:mark_as_read' obj.slug %}" class="pull-right mark-as-read"><i class="fa fa-fw fa-check"></i> marcar como lida</a>
+                    </li>
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-warning">Não há alertas.</div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        $(".mark-as-read").click(function(){
+            let elem = $(this);
+            $.get( elem.data("url"), function( data ) {
+                elem.parent().remove();
+            });
+        })
+    </script>
+{% endblock %}

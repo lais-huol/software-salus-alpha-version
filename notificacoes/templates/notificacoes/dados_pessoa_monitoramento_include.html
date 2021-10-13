@@ -1,0 +1,44 @@
+{% load crispy_forms_tags crispy_forms_utils base_tags %}
+<div class="card">
+    <div class="card-body p-2">
+        <h4 class="card-title">{{ dados_pessoa.nome }}, {{ dados_pessoa.sexo.lower }}, nasceu
+            em {{ dados_pessoa.data_de_nascimento|asdate|date:'d/m/Y' }}.</h4>
+        {% if ultimo_monitoramento %}
+            <div class="alert alert-warning">Último monitoramento realizado em <strong>
+                {{ ultimo_monitoramento.criado_em|date:"SHORT_DATETIME_FORMAT" }}</strong>
+                (por {{ ultimo_monitoramento.criado_por.email }}) com data de investigação
+                <strong>
+                    {{ ultimo_monitoramento.data_de_investigacao|date:"SHORT_DATE_FORMAT" }}</strong>
+                .
+            </div>
+        {% endif %}
+        <i class="fa fa-fw fa-id-card text-muted"></i> CPF:
+        {{ dados_pessoa.cpf|default:"<i>vazio</i>" }} |
+        CNS:
+        {{ dados_pessoa.cns|default:"<i>vazio</i>" }}<br/>
+        <i class="fa fa-fw fa-warning text-muted"></i>
+        {{ notificacao.get_morbidades_display|default:"<i>Nenhuma morbidade</i>" }}<br/>
+        <i class="fa fa-fw fa-map-marker text-muted"></i> {{ dados_pessoa.logradouro }} {{ dados_pessoa.numero_ou_sn_para_sem_numero }}, {{ dados_pessoa.bairro }}, {{ notificacao.bairro.municipio }}<br/>
+        <i class="fa fa-fw fa-phone text-muted"></i> {{ dados_pessoa.telefone_celular }}
+        {{ dados_pessoa.telefone_de_contato|default:"" }} {{ dados_pessoa.email|default:"" }}
+        {% if exibir_form %}
+            <a href="#" class="ml-1 btn btn-link text-danger btn-sm nao-foi-possivel-o-contato">Não foi
+                possível
+                contato?</a>
+            <a href="{% url 'notificacoes:novo_monitoramento_sem_contato' notificacao.pk %}"
+               class="invisible btn btn-sm btn-danger">Confirmar que não foi possível o contato</a>
+            {% if notificacao.pessoa %}
+                {# se não tem pessoa associada, é obrigatório preencher o CPF e, consequentemente, o form de editar pessoa deve ser exibido #}
+                <a href="#" style="display: block" class="atualizar-dados-pessoa mt-1 mb-1">Atualizar dados
+                    da
+                    pessoa monitorada?</a>
+            {% endif %}
+            <div class="row"
+                 {% if notificacao.pessoa and not form.has_errors_in_pessoa %}style="display: none"{% endif %}>
+                {% for f in form.fieldnames_pessoa %}
+                    <div class="col-4">{{ form|getattribute:f|as_crispy_field }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

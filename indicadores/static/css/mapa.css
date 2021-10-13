@@ -1,0 +1,89 @@
+.map {
+    position: relative;
+    border: 1px solid #CCCCCC;
+    border-radius: 8px;
+    height: 450px; /* or as desired */
+    width: 100%; /* This means "100% of the width of its container", the .col-md-8 */
+}
+
+.leaflet-container {
+    background-color: #ffffff
+}
+
+.leaflet-title {
+    margin: 10px 0;
+    font-family: Roboto,sans-serif;
+    font-size: 1.125rem;
+    color: black;
+}
+
+@media print {
+    .page-break {
+        display: block;
+        page-break-before: always;
+    }
+    body,.container,.wrapper,.container-fluid{
+        background-color: #ffffff !important;
+        border-color: #ffffff;
+    }
+    header,footer,.leaflet-control-zoom,.leaflet-control-layers,.highcharts-exporting-group {
+        display: none;
+    }
+    div.wrapper {
+        padding: 6px 6px 0 0;
+        max-width: 1100px;
+    }
+    div.map,.block-print{
+        page-break-inside: avoid;
+    }
+}
+
+@page {
+  /*size: 210mm 297mm;*/
+  /* Chrome sets own margins, we change these printer settings */
+  margin: 27mm 0 27mm 0;
+}
+
+
+.leaflet-tooltip {
+    background-color: transparent;
+    border: transparent;
+    box-shadow: none;
+}
+
+
+.legend-area {
+    position: absolute;
+    bottom: 30px;
+    left: 5px;
+    padding: 10px;
+    background-color: white;
+    outline: 1px solid grey;
+    line-height: 1em;
+    z-index: 999;
+}
+
+.legend-text {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.legend-min {
+    float: left;
+}
+
+.legend-max {
+    float: right;
+}
+
+.status {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -40px 0 0 -40px;
+}

@@ -1,0 +1,153 @@
+{% extends 'base_modal.html' %}
+{% load crispy_forms_tags crispy_forms_utils base_tags %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Notificação {{ notificacao.numero }} <i class="fa fa-fw fa-chevron-right text-muted"></i>
+        Novo Monitoramento</h3>
+{% endblock %}
+
+{% block conteudo %}
+
+
+    <form method="post" class="form">{% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-danger bg-danger text-white">
+                <i class="fa fa-fw fa-minus-circle"></i> Por favor, corrija os erros abaixo.
+            </div>
+        {% endif %}
+
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link active"
+                   id="pills-novo-monitoramento-tab"
+                   href="#pills-novo-monitoramento"
+                   data-toggle="pill"
+                   role="tab">
+                    Registrar Monitoramento
+                </a>
+            </li>
+            {% if possui_monitoramentos and perms.notificacoes.pode_encerrar_monitoramento %}
+            <li class="nav-item">
+                <a class="nav-link"
+                   id="pills-encerramento-tab"
+                   href="#pills-encerramento"
+                   data-toggle="pill"
+                   role="tab">
+                    Registrar Encerramento
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+
+
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane show active"
+                 id="pills-novo-monitoramento"
+                 role="tabpanel">
+                {% include 'notificacoes/dados_pessoa_monitoramento_include.html' with exibir_form=True  %}
+                <div class="card mb-1">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Dados do Monitoramento</h4>
+                            <div class="row">
+                                {% for f in form.fieldnames_monitoramento %}
+                                    <div class="{% if f == 'informacoes_adicionais' or f == 'como_se_sente' %}col-12{% else %}col-4{% endif %}">
+                                        {{ form|getattribute:f|as_crispy_field }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <input type="submit" class="btn btn-lg btn-primary" value="Salvar"/>
+
+    </form>
+    </div>
+
+    {% if not notificacao.estah_encerrada %}
+        <div class="tab-pane"
+             id="pills-encerramento"
+             role="tabpanel">
+            {% include 'notificacoes/dados_pessoa_monitoramento_include.html' with exibir_form=False %}
+            <div class="card mb-1">
+                {% if  form_encerramento %}
+                    <form method="post" class="form">{% csrf_token %}
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">Dados do Encerramento</h4>
+                                <div class="row">
+                                    {% for f in form_encerramento %}
+                                        <div class="col-12">{{ f|as_crispy_field }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <input type="submit" class="btn btn-lg btn-primary" value="Salvar"/>
+                    </form>
+                {% endif %}
+                {% else %}
+                <div class="alert alert-warning bg-warning text-white">
+                    <i class="fa fa-fw fa-minus-circle"></i> Esta notificação foi encerrada
+                    por {{ notificacao.encerrada_por.nome }} em {{ notificacao.encerrada_em }}.
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            campos_contato = ["#div_id_nome_do_contato", "#div_id_informacoes_adicionais_do_contato"];
+            atuacao_sp = ["#div_id_atuacao_sistema_prisional", "#div_id_nome_da_unidade_prisional"];
+
+            campos_contato.concat(atuacao_sp).forEach(function (currentValue){
+                $(currentValue).find('input').attr('required', 'required')
+            });
+
+
+            function toggle_campos(divs, show){
+                divs.forEach(function (currentValue){
+                    if (show) {
+                        $(currentValue).parent().show()
+                        $(currentValue).find('input,select').attr('required', 'required')
+                    }
+                    else {
+                        $(currentValue).parent().hide()
+                        $(currentValue).find('input,select').removeAttr('required')
+                    }
+                });
+            }
+
+            toggle_campos(campos_contato.concat(atuacao_sp), false)
+
+            $( "#id_contato_com_positivo").change(function() {
+                toggle_campos(campos_contato, $(this).val() === "Sim, no trabalho")
+            }).trigger('change');
+
+            $( "#id_pertence_sistema_prisional").change(function() {
+                toggle_campos(atuacao_sp, $(this).val() === "1")
+            }).trigger('change');
+
+            {#$("#id_pertence_sistema_prisional_1").trigger('change');#}
+
+            {#if ($("#id_pertence_sistema_prisional_1").prop("checked")) {#}
+            {#    $("#id_pertence_sistema_prisional_1").trigger("change");#}
+            {#}#}
+
+            $(".nao-foi-possivel-o-contato").click(function () {
+                $(this).toggleClass("active").next().toggleClass("invisible");
+            });
+            $('.atualizar-dados-pessoa').click(function () {
+                $(this).toggleClass("active").next().toggle();
+            });
+        })
+    </script>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+
+    <h2>Notificações Alteradas em {{ dia }}</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Notificação</th>
+            <th>Alterações</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for h in historico_alteracoes %}
+            <tr>
+                <td>
+                    <span class="modal-trigger notificacao-detalhe-modal-trigger" data-notificacao="{{ h.notificacao.pk }}"><i class="fas fa-fw fa-search"></i></span>
+                    {{ h.notificacao.numero }}
+                </td>
+                <td>
+                    <ul class="pl-3">
+                        {% for k, v in h.dados_alterado.items %}
+                            <li><strong>{{ k }}</strong>: <span style="text-decoration: line-through;">{{ v.0 }}</span> <i class="fa fa-chevron-right fa-fw"></i> <span>{{ v.1 }}</span></li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

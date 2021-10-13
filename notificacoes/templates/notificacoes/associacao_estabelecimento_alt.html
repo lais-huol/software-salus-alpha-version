@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Notificações' }}</h2>
+                <p>Abaixo você poderá associar os estabelecimentos aos CNES correspondentes.</p>
+
+                <div>
+{#                    <div class="form-row">#}
+{#                        <div class="col">#}
+{#                            <label for="texto">#}
+{#                                Pesquisa por texto#}
+{#                            </label>#}
+{#                            <input type="text" id="texto" class="form-control"#}
+{#                                   placeholder="Busque por informação de qualquer coluna...">#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <br/>#}
+
+                </div>
+                <div id="table-notificacoes-loading" class="alert alert-warning">Carregando...</div>
+                <table id="table-notificacoes" class="table mb-0">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'libs/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'libs/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    <!-- Table Editable plugin-->
+    <script src="{% static 'js/tabledit_custom.js' %}"></script>
+
+    <script src="{% static 'js/vigilancianatal.js' %}"></script>
+
+    {{ dataset_rows|json_script:"dataSetRows" }}
+
+    <script type="text/javascript">
+        let dataSetRows = JSON.parse(document.getElementById('dataSetRows').textContent);
+        $(document).ready(function () {
+
+
+            table = $("#table-notificacoes").DataTable({
+                data: dataSetRows,
+                {#dom: 'rti<"row"<"col-sm-6 col-md-6"l><"col-sm-6 col-md-6"p>>',#}
+                columns: [
+                    {title: "Nome do estabelecimento"},
+                    {
+                        title: "CNES",
+                        defaultContent: '',
+                        editField: 'cnes',
+                    },
+                ],
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"
+                    }
+                },
+                initComplete: function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+
+                        var filterWidget = column.context[0].aoColumns[column[0][0]].filterWidget
+
+                        var select = $(`#${filterWidget}`).on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+                            column
+                                .search(val)
+                                .draw();
+                        });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            if (d === null)
+                                return
+                            select.append('<option value="' + d + '">' + d + '</option>')
+                        });
+                        select.select2()
+                    });
+
+
+                }
+                ,
+                drawCallback: function () {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+
+                    $('#table-notificacoes').Tabledit({
+                        deleteButton: false,
+                        saveButton: true,
+                        autoFocus: true,
+                        buttons: {
+                            edit: {
+                                class: 'btn btn-sm btn-primary',
+                                html: '<i class="remixicon-edit-fill"></i> Editar',
+                                action: 'edit'
+                            }, save: {
+                                class: 'btn btn-sm btn-success',
+                                html: '<i class="remixicon-save-fill"></i> Salvar',
+                                action: 'save'
+                            }
+                        },
+                        columns: {
+                            identifier: [0, 'nome'],
+                            editable: [[1, 'codigo_cnes']]
+                        },
+                        onAjax: function (action, serialize) {
+                            data = JSON.parse('{"' + decodeURI(serialize).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}')
+                            response = false
+                            return $.ajax('{% url "api:associacao_nome_estabelecimento" 9999 %}'.replace('9999', data.cnes), {
+                                data: serialize, method: 'POST', beforeSend: function (request) {
+                                    request.setRequestHeader('X-CSRFToken', Cookies.get('csrftoken'))
+                                }
+                            })
+                        },
+                        onFail: function (e) {
+                            if (e.responseJSON.cnes) {
+                                alert('Certifique-se de que o CNES contenha 7 dígitos')
+                            } else {
+                                alert('Erro ao se comunicar com o servidor.')
+                            }
+                        }
+                    });
+                }
+            })
+            $('#table-notificacoes').on('draw.dt', function () {
+                $("#table-notificacoes-loading").hide();
+            });
+
+            reloadTriggers();
+
+            $('#texto').on('keyup', function (e) {
+                table.search(this.value).draw()
+            })
+        });
+    </script>
+{% endblock scripts %}

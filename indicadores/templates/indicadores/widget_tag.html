@@ -1,0 +1,30 @@
+<div class="card-box bg-{{ cor }} border-{{ cor }}" style="">
+    <div class="row align-items-center my-auto">
+        {% if icone %}
+            <div class="col text-center">
+                <h1 class="display-4"><i class="fas fa-{{ icone }} text-white" aria-hidden="true"></i></h1>
+            </div>
+        {% endif %}
+        <div class="col">
+            <div class="text-white">
+                {% if valor %}
+                    <h2 class="text-white"><b>{{ valor }}</b></h2>
+                    <p>{{ titulo }}</p>
+                {% else %}
+                    <h3 class="text-white text-center"><b>{{ titulo }}</b></h3>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if extras %}
+        <div class="row">
+            {% for titulo, valor in extras.items %}
+                <div class="col text-center">
+                    <h4 class="text-white mt-0">{{ titulo }}</h4>
+                    <h3 class="text-white my-3">{{ valor }}</h3>
+    {#                            <h4 class="text-white mb-0">4,55%</h4>#}
+                </div>
+            {% endfor %}
+        </div><!-- end row -->
+    {% endif %}
+</div>

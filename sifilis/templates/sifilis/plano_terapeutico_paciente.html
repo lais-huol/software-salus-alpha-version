@@ -1,0 +1,59 @@
+{% extends 'base_modal.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Sífilis: gestor de casos - {{ object.paciente.nome }}</h3>
+{% endblock %}
+
+{% block conteudo %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sifilis:listar_por_pessoa' object.paciente.pk %}">{{ object.paciente }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ object.plano_terapeutico }}</li>
+        </ol>
+    </nav>
+
+    <h2>{{ object.plano_terapeutico }}</h2>
+
+    <div class="row">
+        <div class="col-12">
+
+            {% if object.estah_em_andamento %}
+                <div class="card">
+                    <div class="card-header">Informações</div>
+                    <div class="card-body">
+                        <p><strong>Medicamento:</strong> {{ object.plano_terapeutico.medicamento.nome }}, {{ object.plano_terapeutico.medicamento.solucao }}, {{ object.plano_terapeutico.medicamento.metodo }}</p>
+                        <p><strong>Orientação:</strong> {{ object.plano_terapeutico.orientacao }}</p>
+                        <p><strong>Quantidade de doses:</strong> {{ object.plano_terapeutico.qtd_doses }}</p>
+                        <p><strong>Intervalo entre doses (horas):</strong> {{ object.plano_terapeutico.invervalo_entre_doses_em_horas }}h</p>
+                        <p><strong>Prazo extra (horas):</strong> {{ object.plano_terapeutico.prazo_extra_em_horas }}h</p>
+                        <a class="btn btn-success" href="{% url 'sifilis:plano_terapeutico_paciente_finalizar' object.pk %}">Finalizar</a>
+                        <a class="btn btn-danger" href="{% url 'sifilis:plano_terapeutico_paciente_suspender' object.pk %}">Suspender</a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-header">Doses Aplicadas</div>
+                {% if object.doseaplicada_set.exists %}
+                    <ul class="list-group list-group-flush">
+                        {% for i in object.doseaplicada_set.all %}
+                            <li class="list-group-item">{{ i.dose_aplicada_em }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if object.estah_em_andamento %}
+                    <div class="card-body">
+                        <h4>Registrar Nova Dose</h4>
+                        <form action="" id="formulario" method="post" enctype="multipart/form-data">{% csrf_token %}
+                            {{ form_registrar_dose|crispy }}
+                            <input type="submit" id="submit" class="btn btn-primary" value="Registrar Dose"/>
+                        </form>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,86 @@
+{% load static %}
+{% if user.is_authenticated %}
+
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle  waves-effect waves-light" data-toggle="dropdown" href="#" role="button"
+           aria-haspopup="false" aria-expanded="false">
+            <i class="fe-bell noti-icon"></i>
+            <span class="badge badge-danger rounded-circle noti-icon-badge" style="display: none">0</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right dropdown-lg"
+             style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-269px, 70px, 0px);"
+             x-placement="bottom-end">
+            <!-- item-->
+            <div class="dropdown-item noti-title">
+                <h5 class="m-0">
+                    <span class="float-right">
+{#                        <a href="" class="text-dark">#}
+{#                            <small>Clear All</small>#}
+{#                        </a>#}
+                    </span>Alertas
+                </h5>
+            </div>
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 511px;">
+                <div class="slimscroll noti-scroll" style="overflow: hidden; width: auto; height: 511px;">
+                </div>
+                <div class="slimScrollBar"
+                     style="background: rgb(158, 165, 171); width: 8px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 120.227px;"></div>
+                <div class="slimScrollRail"
+                     style="width: 8px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div>
+            </div>
+            <!-- All-->
+            <a href="{% url 'base:alertas' %}" class="dropdown-item text-center text-primary notify-item notify-all">
+                Ver todos
+                <i class="fi-arrow-right"></i>
+            </a>
+        </div>
+    </li>
+
+    <li class="dropdown notification-list">
+        <a class="nav-link dropdown-toggle nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#"
+           role="button" aria-haspopup="false" aria-expanded="false">
+        <span class="pro-user-name ml-1">
+                                    {{ is_impersonated_session|yesno:'Representando: ,' }}{{ user.nome }} <i class="mdi mdi-chevron-down"></i>
+                                </span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
+            <!-- item-->
+            <div class="dropdown-header noti-title">
+                {% if user.is_superuser %}
+                    <h6 class="text-overflow m-0">Administrador</h6>
+                {% elif user.is_usuario_distrito %}
+                    <h6 class="text-overflow m-0">{{ user.perfil_distrito.distrito.nome }}</h6>
+                {% endif %}
+            </div>
+
+            <!-- item-->
+            <a href="{% url 'base:meu_perfil' %}" class="dropdown-item notify-item">
+                <i class="remixicon-account-circle-line"></i>
+                <span>Meu perfil</span>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <!-- item-->
+            <a href="{% url 'base:logout' %}" class="dropdown-item notify-item">
+                <i class="remixicon-logout-box-line"></i>
+                <span>Sair do sistema</span>
+            </a>
+
+        </div>
+    </li>
+{% else %}
+    {#    <li class="notification-list">#}
+    {#        <a class="nav-link nav-user mr-0 waves-effect waves-light" data-toggle="dropdown" href="#"#}
+    {#           role="button" aria-haspopup="false" aria-expanded="false">#}
+    {#        <span class="ml-1">#}
+    {#                                    Cadastrar-se#}
+    {#                                </span>#}
+    {#        </a>#}
+    {#    </li>#}
+    <li class="notification-list">
+        <a class="nav-link nav-user mr-0 waves-effect waves-light" href="{% url 'login' %}" role="button">
+            <span class="ml-1">Entrar no sistema</span>
+        </a>
+    </li>
+{% endif %}

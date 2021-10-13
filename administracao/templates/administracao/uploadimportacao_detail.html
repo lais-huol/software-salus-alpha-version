@@ -1,0 +1,32 @@
+{% extends 'base_modal.html' %}
+{% load static crispy_forms_tags base_tags modal %}
+{% block cabecalho %}<h2>Importação de dados - {{ object.datahora|date:'d/m/Y, H:i  ' }}</h2>{% endblock %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <div id="json" class="json-view"></div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'rest_framework/docs/css/jquery.json-view.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'rest_framework/docs/js/jquery.json-view.min.js' %}"></script>
+    <script src="{% static 'rest_framework/docs/js/highlight.pack.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+                $("#json").jsonView({{ object.dados_do_processamento|asjson|safe }});
+        });
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags crispy_forms_utils crispy_forms_field crispy_forms_filters i18n base_tags %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <h4>Associação de notificações à bairros</h4>
+                <p>
+                    Abaixo você poderá visualizar as notificações onde os bairros foram associados como pertencentes a outras cidades, mas que a localidade obtida através CEP pertence a Natal.
+                </p>
+                <p>
+                    Nesses casos, o sistema utilizou o bairro obtido do CEP para fazer a associação. Você deverá validar individualmente um a um as associações realizadas, especificando o bairro ou informando que não "Não faz parte de Natal"
+                </p>
+                <form enctype="multipart/form-data" method="post">
+                    {% csrf_token %}
+                    <table class="table mb-0">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Notificação</th>
+                            <th>Associação realizada</th>
+                            <th>Endereço</th>
+                            <th>Não faz parte de Natal</th>
+                            <th>Bairro a associar</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for field in form %}
+                            {% if not '_check' in field.name %}
+                                {% with notificacoes|get:field.name as notificacao %}
+                                    <tr>
+                                        <th scope="row">
+                                        <span class="modal-trigger notificacao-detalhe-modal-trigger text-nowrap"
+                                              data-notificacao="{{ field.name }}"
+                                              data-target="{% url 'notificacoes:visualizar_todos' field.name %}">
+                                    <i class="fas fa-fw fa-search"></i> {{ field.name }}
+                                </span>
+
+                                        </th>
+                                        <td>{{ notificacao.get_associacao_bairro }}</td>
+                                        <td>{{ notificacao.get_endereco_completo }}</td>
+                                        <td>
+                                            {% with check=field.name|add:"_check" %}
+                                                {{ form|getattribute:check }}
+                                            {% endwith %}
+                                        </td>
+                                        <td>{{ field.as_widget }}</td>
+                                    </tr>
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até
+                                <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong>
+                                registros</p>
+                        </div>
+                        <div class="col-8">
+                            {% include 'paginator.html' %}
+                        </div>
+                    </div>
+                    <input type="submit" class="btn btn-secondary" value="{% trans "Enviar" %}"/>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    {{ dataset_rows|json_script:"dataSetRows" }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").select2({
+                placeholder: 'Selecione um bairro correspondente'
+            });
+            reloadTriggers();
+
+            $("input[type='checkbox']").on('change', function () {
+                var select_id = $(this).attr('id').substring(0, $(this).attr('id').length - 6)
+                $(`select[id="${select_id}"]`).prop('disabled', this.checked).val(null).trigger('change');
+            });
+        });
+
+    </script>
+{% endblock scripts %}

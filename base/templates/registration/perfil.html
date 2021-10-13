@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <div class="row">
+                    <h2>{{ titulo|default:'Meu Perfil' }}</h2>
+                    <p>{{ texto }}</p>
+                </div>
+                <div class="row">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <a href="{% url 'base:alterar_senha' %}" class="btn btn-secondary">Alterar senha</a>
+                        <input type="submit" class="btn btn-primary" value="{% trans "Submeter" %}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base_modal.html' %}
+{% load static widgets crispy_forms_tags crispy_forms_utils crispy_forms_field crispy_forms_filters i18n base_tags %}
+
+{% block conteudo %}
+    {% autoescape off %}
+        {{ boletim }}
+    {% endautoescape %}
+    <br/>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'css/leaflet.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/highcharts.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/mapa.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet"
+          type="text/css"/>
+    <link href="{% static 'libs/bootstrap-tagsinput/bootstrap-tagsinput.css' %}" rel="stylesheet" type="text/css"/>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+{% endblock %}
+{% block scripts %}
+{#    <script src="https://code.highcharts.com/stock/indicators/indicators.js"></script>#}
+{#    <script src="https://code.highcharts.com/stock/highstock.js"></script>#}
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/highstock.js' %}"></script>
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/highcharts-3d.js' %}"></script>
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/highcharts-more.js' %}"></script>
+    <script src="{% static 'js/Highcharts-Stock-8.1.2/indicators/indicators.js' %}"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+    <script src="{% static 'js/Highcharts-8.1.2/modules/exporting.js' %}"></script>
+    <script src="{% static 'js/Highcharts-8.1.2/modules/export-data.js' %}"></script>
+    <script src="{% static 'js/leaflet.js' %}"></script>
+    <script src="{% static 'js/heatmap.min.js' %}"></script>
+    <script src="{% static 'js/leaflet_heatmap.js' %}"></script>
+    <script src="{% static 'js/leaflet-image.js' %}"></script>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <script src="{% static 'js/Natal_Bairros.js' %}"></script>
+    <script src="{% static 'js/sample_data.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js' %}"></script>
+    <script src="{% static 'libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+
+    {% autoescape off %}
+        {% for script in scripts %}
+            {{ script|safe }}
+        {% endfor %}
+    {% endautoescape %}
+{% endblock %}

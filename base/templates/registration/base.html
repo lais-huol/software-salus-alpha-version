@@ -1,0 +1,72 @@
+{% load static bootstrap %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Salus - Sistema de Atenção e Vigilância em Saúde</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Sistema de Monitoramento de Vigilância Epidemiológica para cidade do Natal." name="description" />
+        <meta content="LAIS/UFRN e NAVI/IFRN" name="author" />
+        <meta name="googlebot">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+        <link href="{% static 'libs/jquery-toast/jquery.toast.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App css -->
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'css/app.min.css' %}" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body class="login">
+         <div class="navbar-custom shadow" style="position: relative; background: #fff !important;">
+            <div class="container-fluid">
+                <!-- LOGO -->
+                <div>
+                    <a href="http://lais.huol.ufrn.br/" class="logo text-center" target="_blank" rel="noopener">
+                        <span class="logo-lg">
+                            <img class="img-fluid" src="{% static 'images/lais-topbar.png' %}" alt="" style="max-height: 50px !important;">
+                        </span>
+                        <span class="logo-sm">
+                            <img class="img-fluid"  src="{% static 'images/lais-topbar.png' %}" alt="" style="max-height: 50px !important;">
+                        </span>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="account-pages mt-5 mb-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-lg-6 col-xl-5">
+                        <div class="card">
+                            <div class="card-body p-4">
+                                <div class="text-center w-75 m-auto">
+                                    <a href="/">
+                                        <img height="120" class="img-fluid" src="{% static "images/salus.png" %}" alt="Logomarca do Salus"/>
+                                    </a>
+                                    {% block title %}{% endblock %}
+                                </div>
+                                {% block content %}{% endblock %}
+                            </div> <!-- end card-body -->
+                        </div>
+                        <!-- end card -->
+                    </div> <!-- end col -->
+                </div>
+            </div>
+        </div>
+
+         {% include 'footer.html' %}
+        <!-- Vendor js -->
+        <script src="{% static 'js/vendor.min.js' %}"></script>
+        <script src="{% static 'libs/jquery-mask-plugin/jquery.mask.min.js' %}"></script>
+        <script src="{% static 'libs/parsleyjs/parsley.min.js' %}"></script>
+        <script src="{% static 'libs/jquery-toast/jquery.toast.min.js' %}"></script>
+        <script src="{% static 'libs/parsleyjs/pt-br.js' %}"></script>
+        <!-- App js -->
+        <script src="{% static 'js/app.min.js' %}"></script>
+    </body>
+</html>

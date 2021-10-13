@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block conteudo %}
+    <br/>
+    <div class="row">
+        <div class="col-4">
+
+            <div class="card">
+                <div class="card-header font-weight-bold">Dados do Paciente</div>
+                <div class="card-body">
+
+                    <label>Nome:</label> {{ pessoa.nome }}<br/>
+                    <label>CPF:</label> {{ pessoa.cpf }}<br/>
+
+                    <label>Data de Nascimento:</label> {{ pessoa.data_de_nascimento }}<br/>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-8">
+
+            <div class="card">
+                <div class="card-header font-weight-bold">Módulos disponíveis</div>
+                <div class="card-body text-center">
+                    {% for app in apps %}
+                        <a class="btn btn-outline-secondary mostrar-modal center-block" href="#"
+                           data-target="{% url app.url_pessoa pessoa.pk %}">
+                            <img src="{% static app.icon %}" style="width: 100px" /><br />
+                            {{ app.title }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+    <!-- Datatables -->
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

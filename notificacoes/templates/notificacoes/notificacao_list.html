@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags base_tags %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Notificações' }}</h2>
+                <p>Abaixo você poderá visualizar e buscar as notificações de COVID.</p>
+
+                <form id="formulario">
+                    <div class="form-row">
+                        {% for field in form %}
+                            <div class="col-4">
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field.as_widget }}
+                            </div>
+                        {% endfor %}
+                        <div class="col-3">
+                            <br/>
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <button type="submit" formaction="{% url 'notificacoes:baixar_csv' %}" class="btn btn-primary">Baixar CSV</button>
+                            <button type="submit" formaction="{% url 'notificacoes:baixar_excel' %}" class="btn btn-primary">Baixar Excel</button>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                    </div>
+                </form>
+                <br/>
+                <div class="tablesaw-overflow">
+                <table id="table-notificacoes" class="tablesaw tablesaw-columntoggle" data-tablesaw-mode="columntoggle"
+                       data-tablesaw-minimap>
+                    <thead>
+                    <tr>
+                        <th data-tablesaw-priority="persist">Nº da notificação</th>
+                        <th data-tablesaw-priority="persist">Nome</th>
+                        <th data-tablesaw-priority="1">Telefone</th>
+                        <th data-tablesaw-priority="2">Bairro</th>
+                        <th data-tablesaw-priority="3">Unidade Notificadora</th>
+                        <th data-tablesaw-priority="3">Unidade Básica de Referência</th>
+                        <th data-tablesaw-priority="4">Resultado do teste</th>
+                        <th data-tablesaw-priority="6">Data da notificação</th>
+                        <th data-tablesaw-priority="5">Data do início dos sintomas</th>
+                        <th>Classificação final</th>
+                        <th data-tablesaw-priority="6">Fonte de dados</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for notificacao in object_list %}
+                        <tr>
+                            <td>
+                                <span class="modal-trigger notificacao-detalhe-modal-trigger text-nowrap"
+                                      data-notificacao="{{ notificacao.pk }}"
+                                      data-target="{% url 'notificacoes:visualizar' notificacao.numero %}">
+                                    <i class="fas fa-fw fa-search"></i> {{ notificacao.numero }}
+                                    {% if notificacao.estah_encerrada %}
+                                    <br/>
+                                    <span class="badge badge-danger">encerrada</span>
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>{{ notificacao.dados.nome_completo }}</td>
+                            <td>{{ notificacao.dados.telefone_de_contato|default:notificacao.dados.telefone_celular|default_if_none:'---' }}</td>
+                            <td>{{ notificacao.bairro.nome }}</td>
+                            <td>
+                                {% if notificacao.estabelecimento_saude %}
+                                    {{ notificacao.estabelecimento_saude }}
+                                {% else %}
+                                    <span class="text-muted">notificado na UF {{ notificacao.dados.estado_da_notificacao }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if notificacao.estabelecimento_saude_referencia %}
+                                    {{ notificacao.estabelecimento_saude_referencia }}
+                                {% else %}
+                                    <span class="text-muted">notificado na UF {{ notificacao.dados.estado_da_notificacao }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ notificacao.dados.resultado_do_teste|default_if_none:'---' }}</td>
+                            <td>{{ notificacao.data|date:'d/m/Y' }}</td>
+                            <td>{{ notificacao.dados.data_do_inicio_dos_sintomas|asdate|date:'d/m/Y'|default_if_none:'---' }}</td>
+                            <td>{{ notificacao.dados.classificacao_final|default_if_none:'Suspeito' }}</td>
+                            <td>{{ notificacao.get_fonte_dados_display }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+            <div class="row">
+            <div class="col-4">
+                <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong> registros</p>
+            </div>
+            <div class="col-8">
+                {% include 'paginator.html' %}
+            </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/tablesaw/tablesaw.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.jquery.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.init.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select').select2();
+            reloadTriggers();
+
+            $("#formulario").submit(function () {
+                form = $(this)
+                form.find('button').attr("disabled", true).val("Submetendo...");
+                setTimeout(function () {
+                    form.find('button').removeAttr("disabled");
+                }, 30000)
+                return true;
+            });
+
+        });
+    </script>
+{% endblock scripts %}

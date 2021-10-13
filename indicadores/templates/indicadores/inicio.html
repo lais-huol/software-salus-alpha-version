@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static widgets crispy_forms_tags crispy_forms_utils crispy_forms_field crispy_forms_filters i18n base_tags %}
+
+{% block conteudo %}
+    <div class="card-box">
+        <div class="row">
+            <div class="col">
+                {% render_widget cor='danger' titulo='Nº de notificações' valor=notificacoes_ativas icone='procedures' %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% render_widget cor='info' titulo='Resultado dos testes' extras=notificacoes_resultado_do_teste %}
+            </div>
+            <div class="col">
+                {% render_widget cor='warning' titulo='Estado dos testes' extras=notificacoes_estado_do_teste %}
+            </div>
+        </div>
+    </div>
+    <br/>
+{% endblock %}

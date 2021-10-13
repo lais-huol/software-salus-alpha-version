@@ -1,0 +1,76 @@
+{% extends 'base_modal.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Sífilis: gestor de casos - {{ pessoa.nome }}</h3>
+{% endblock %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header font-weight-bold">Planos Terapêuticos</div>
+                {% if pessoa.sifilis_planoterapeutico_set.exists %}
+                    <ul class="list-group list-group-flush">
+                        {% for i in pessoa.sifilis_planoterapeutico_set.all %}
+                            <li class="list-group-item">
+                                <a href="{% url 'sifilis:plano_terapeutico_paciente' i.pk %}">
+                                    <span class="badge badge-info">{{ i.get_situacao_display }}</span> {{ i.plano_terapeutico }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="card-body">
+                    <a class="btn btn-outline-primary" href="{% url 'sifilis:adicionar_plano_terapeutico' object.pk %}">Adicionar</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header font-weight-bold">Exames</div>
+                {% if pessoa.sifilis_exame_set.exists %}
+                    <ul class="list-group list-group-flush">
+                        {% for i in pessoa.sifilis_exame_set.all %}
+                            <li class="list-group-item">
+                                 <a href=""><span class="badge badge-info">{{ i.data_de_realizacao|date:"d/m/Y" }}</span> Exame: {{ i.resultado.tipo_de_exame }} / Resultado: {{ i.resultado }} {% if i.observacoes %} (Observações: {{ i.observacoes }})</a>{% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="card-body">
+                    <a class="btn btn-outline-primary" href="{% url 'sifilis:adicionar_exame' object.pk %}">Adicionar</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header font-weight-bold">Relacionamentos</div>
+                {% if pessoa.sifilis_relacionamento_set.exists %}
+                    <ul class="list-group list-group-flush">
+                        {% for i in pessoa.sifilis_relacionamento_set.all %}
+                            <li class="list-group-item">
+                                <a href=""><span class="badge badge-secondary">{{ i.get_tipo_de_relacionamento_display }}</span> {{ i.pessoa.nome }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="card-body">
+                    <a class="btn btn-outline-primary" href="{% url 'sifilis:adicionar_relacionamento' object.pk %}">Adicionar</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header font-weight-bold">Antecedentes</div>
+                {% if pessoa.sifilis_antecedente_set.exists %}
+                    <ul class="list-group list-group-flush">
+                        {% for i in object.sifilis_antecedente_set.all %}
+                        <li class="list-group-item">
+                            <a href=""><span class="badge badge-light">{{ i.get_situacao_display }}</span> {{ i.cid }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <div class="card-body">
+                    <a class="btn btn-outline-primary" href="{% url 'sifilis:adicionar_antecedente' object.pk %}">Adicionar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

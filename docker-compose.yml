@@ -1,0 +1,33 @@
+version: '3'
+services:
+  db:
+    image: postgres:10
+    ports:
+      - "5432:5432"
+    volumes:
+    - postgres-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=salus
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=123456
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/var/lib/redis
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+      - db
+    links:
+      - db:db
+volumes:
+  redis-data:
+  postgres-data:

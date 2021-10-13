@@ -1,0 +1,143 @@
+<script>
+        $(function() {
+            var mapa_base = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {{ js_base_map_opts }});
+            var id_container = {{ id_container }}
+            // BAIRROS
+            var bairros_layer = new L.LayerGroup({
+                spiderfyOnMaxZoom: true, showCoverageOnHover: false, zoomToBoundsOnClick: true, options: {
+                    iconCreateFunction: function (cluster) {
+                        return new L.DivIcon({html: '<b>Mostrar bairros</b>'});
+                    }
+                }
+            });
+
+            // HEATMAP
+            var heatmap_layer = new L.LayerGroup({
+                spiderfyOnMaxZoom: true, showCoverageOnHover: false, zoomToBoundsOnClick: true, options: {
+                    iconCreateFunction: function (cluster) {
+                        return new L.DivIcon({html: '<b>Mapa de calor</b>'});
+                    }
+                }
+            });
+
+
+            var legendCanvas = document.createElement('canvas');
+            legendCanvas.width = 100;
+            legendCanvas.height = 10;
+            var min = document.querySelector('#legend_min_'+id_container);
+            var max = document.querySelector('#legend_max_'+id_container);
+            var gradientImg = document.querySelector('#legend_grad_'+id_container);
+            var legendCtx = legendCanvas.getContext('2d');
+            var gradientCfg = {};
+            function updateLegend(data) {
+              // the onExtremaChange callback gives us min, max, and the gradientConfig
+              // so we can update the legend
+              min.innerHTML = 'Baixa';
+              max.innerHTML = 'Alta';
+              // regenerate gradient image
+              if (data.gradient != gradientCfg) {
+                gradientCfg = data.gradient;
+                var gradient = legendCtx.createLinearGradient(0, 0, 100, 1);
+                for (var key in gradientCfg) {
+                  gradient.addColorStop(key, gradientCfg[key]);
+                }
+                legendCtx.fillStyle = gradient;
+                legendCtx.fillRect(0, 0, 100, 10);
+                gradientImg.src = legendCanvas.toDataURL();
+              }
+            };
+            /* legend code end */
+
+
+            var heatmap_overlay = new HeatmapOverlay({
+                radius: .003,
+                maxOpacity: 1,
+                scaleRadius: true,
+                useLocalExtrema: false,
+                latField: 'y',
+                lngField: 'x',
+                valueField: 'value',
+                onExtremaChange: updateLegend,
+            });
+            {% if heatmap_data %}
+                heatmap_overlay.setData({{ heatmap_data }});
+            {% endif %}
+            heatmap_layer.addLayer(heatmap_overlay)
+
+
+            var heatmap = L.map({{ id_container }}, {
+                center: [-5.80483432622816, -35.22451690754891],
+                zoom: 11.5,
+                scrollWheelZoom: false,
+                zoomSnap: 0.25,
+                attributionControl: false,
+                preferCanvas: false,
+                layers: [L.tileLayer(''), bairros_layer, heatmap_layer]
+            });
+
+
+            var bairros_natal = L.geoJSON(bairrosGeoJSON, {
+                onEachFeature: function (feature, layer) {
+                    let fontSize = layer.feature.properties.area / heatmap.getZoom() * 30000;
+                          layer.bindTooltip(layer.feature.properties.Name,
+                              {className: "label_"+id_container, permanent: true, direction: "center"}
+                          ).openTooltip()
+                }
+            });
+            bairros_natal.setStyle(function () {
+                return {
+                    weight: 1.5,
+                    opacity: .8,
+                    fillOpacity: 0
+                }
+            });
+            bairros_layer.addLayer(bairros_natal)
+
+
+            L.control.layers({"Mapa de calor": heatmap_layer}, {"Bairros": bairros_layer}).addTo(heatmap);
+
+            alterFontSize = function () {
+                var zoomLevel = heatmap.getZoom();
+                var tooltip = $('.label_'+id_container);
+                zoomLevel = Math.floor(zoomLevel);
+                console.log(zoomLevel)
+                switch (zoomLevel) {
+                    case 7:
+                        tooltip.css('font-size', 2);
+                        break;
+                    case 8:
+                        tooltip.css('font-size', 3);
+                        break;
+                    case 9:
+                        tooltip.css('font-size', 4);
+                        break;
+                    case 10:
+                        tooltip.css('font-size', 5);
+                        break;
+                    case 11:
+                        tooltip.css('font-size', 7);
+                        break;
+                    case 12:
+                        tooltip.css('font-size', 10);
+                        break;
+                    case 13:
+                        tooltip.css('font-size', 12);
+                        break;
+                    case 14:
+                        tooltip.css('font-size', 14);
+                        break;
+                    case 15:
+                        tooltip.css('font-size', 17);
+                        break;
+                    default:
+                        tooltip.css('font-size', 18);
+                }
+            }
+            heatmap.on('zoomend', alterFontSize);
+            L.control.scale({metric: true, imperial: false}).addTo(heatmap);
+            L.control.attribution({prefix: 'Fonte: Salus'}).addTo(heatmap);
+            alterFontSize()
+
+
+        });
+</script>

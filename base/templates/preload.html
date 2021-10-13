@@ -1,0 +1,43 @@
+{% load static base_tags %}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <title>Salus - Sistema de Atenção e Vigilância em Saúde</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Sistema de Monitoramento de Vigilância Epidemiológica para cidade do Natal." name="description"/>
+    <meta content="LAIS/UFRN e NAVI/IFRN" name="author"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}">
+{#    {% if DEV %}#}
+{#        <link href="{% static 'css/app.red.css' %}" rel="stylesheet" type="text/css"/>#}
+{#    {% else %}#}
+    <link href="{% static 'css/app.white.css' %}" rel="stylesheet" type="text/css"/>
+{#    {% endif %}#}
+    {% block styles %}{% endblock %}
+
+</head>
+
+<body>
+
+
+
+<!-- Pre-loader -->
+        <div id="preloader">
+            <div id="status">
+                <div class="bouncingLoader"><div ></div><div ></div><div ></div></div>
+            </div>
+        </div>
+<!-- End Preloader-->
+
+
+<!-- Vendor js -->
+
+{% block scripts %}{% endblock %}
+
+<!-- App js -->
+
+
+</body>
+</html>

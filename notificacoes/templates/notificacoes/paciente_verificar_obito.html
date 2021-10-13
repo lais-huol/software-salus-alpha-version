@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load i18n static crispy_forms_tags bootstrap base_tags %}
+
+{% block conteudo %}
+    <form action="" id="formulario" method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="card-box">
+            <h2>{{ titulo|default:'Formulário' }}</h2>
+            <div class="row">
+                <div class="col-6">
+                    <div class="alert alert-info">
+                        <strong>Unidade:</strong> {{ obj.dados_censo_leitos.unidade_nome }}<br/>
+                        <strong>Paciente:</strong> {{ obj.dados_censo_leitos.paciente_nome }}<br/>
+                        <strong>Data de Nascimento:</strong> {{ obj.data_de_nascimento|date:'d/m/Y' }} ({{ obj.data_de_nascimento|timesince }})<br/>
+                        <strong>Município:</strong> {{ obj.dados_censo_leitos.paciente_municipio_nome|default:"-" }}<br/>
+                        <strong>Data de admissão:</strong> {{ obj.dados_censo_leitos.interancao_admissao}}<br/>
+                        <strong>Daga da liberação:</strong>{{obj.dados_censo_leitos.internacao_liberacao|default:"-" }}<br/>
+                        <strong>Tipo de leito:</strong> {{ obj.dados_censo_leitos.leito_tipo_leito|default:"-" }}<br/>
+                        <strong>Requisição:</strong> {{ obj.dados_censo_leitos.requisicao_gal|default:"-" }}<br/>
+                        <strong>Diagnóstico:</strong> {{ obj.dados_censo_leitos.diagnostico }}<br/>
+                    </div>
+                </div>
+                <div class="col-6">
+                    {{ form.cns|as_crispy_field }}
+                    <div id="cns-resultado">
+                        <h4>Confirme os Dados do CNS</h4>
+                        <strong>Paciente:</strong> <span id="cns-nome"><span class="badge badge-warning">informe acima o CNS ou CPF</span></span><br/>
+                        <strong>CPF:</strong> <span id="cns-cpf"></span><br/>
+                        <strong>Nascimento:</strong> <span id="cns-nascimento"></span><br/>
+                        <strong>Nome da mãe:</strong> <span id="cns-mae"></span><br/>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for fieldname in form.field_order %}
+                    <div class="col-6">{{ form|getattribute:fieldname|as_crispy_field }}</div>
+                {% endfor %}
+            </div>
+            <input type="submit" id="submit" class="btn btn-primary" value="Confirmar Óbito"/>
+        </div>
+    </form>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    <script type="text/javascript">
+
+        function formatState(state) {
+            if (!state.id) {
+                return state.text;
+            }
+            var $state = $(
+                `<span><span class="notificacao-detalhe-modal-trigger" data-notificacao="${state.id}" data-animation="blur" data-plugin="custommodal" data-overlaycolor="#38414a"><i class="remixicon-search-line"></i></span> - ${state.text}</span>`
+            );
+            return $state;
+        };
+
+
+        $(document).ready(function () {
+
+            $("#id_cns").keyup(function(){
+                let cpf_ou_cns = $(this).val();
+                if (cpf_ou_cns.length >= 11) {
+                    $.getJSON( "/api/cns/"+cpf_ou_cns, function( data ) {
+                        console.log(data);
+                        $("#cns-nome").html(data.nome || "<span class='badge badge-danger'>não encontrado</span>");
+                        $("#cns-cpf").html(data.cpf || "");
+                        $("#cns-nascimento").html(data.data_de_nascimento || "");
+                        $("#cns-mae").html(data.nome_da_mae || "");
+                    });
+                }
+            });
+
+            $("select").select2({
+                allowClear: true,
+                placeholder: 'Selecione um registro',
+                templateResult: formatState,
+                closeOnSelect: false,
+            });
+
+            $('#id_notificacao').on('select2:select', function (e) {
+                let data = e.params.data;
+                let notificacao_numero = data.id;
+                $.getJSON( "/api/notificacao/"+notificacao_numero+"/", function( notificacao_as_json ) {
+                    let dadosesusve = notificacao_as_json.dados_esusve;
+                    let sexo = dadosesusve.sexo;
+                    let endereco_logradouro = dadosesusve.logradouro;
+                    let endereco_numero = dadosesusve.numero_ou_sn_para_sem_numero
+                    $('#id_endereco_logradouro').val(endereco_logradouro);
+                    $('#id_endereco_numero').val(endereco_numero);
+                    $('#id_sexo').val(sexo[0]);
+                    $('#id_sexo').trigger("change");
+                });
+            });
+
+            $("input[type='checkbox']").on('change', function () {
+                var select_id = $(this).attr('id').substring(0, $(this).attr('id').length - 6)
+                $(`select[id="${select_id}"]`).prop('disabled', this.checked).val(null).trigger('change');
+            });
+
+            reloadTriggers()
+        })
+        ;
+
+    </script>
+{% endblock scripts %}

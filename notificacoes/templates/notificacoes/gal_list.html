@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static base_tags %}
+
+{% block conteudo %}
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Notificações' }}</h2>
+                <p>Abaixo você poderá visualizar e buscar as notificações passíveis de alteração do número de requisição
+                    do GAL.</p>
+
+
+    <div class="row">
+                        <form id="formulario">
+                    <div class="form-row">
+                        {% for field in form %}
+                            <div class="col-4">
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field.as_widget }}
+                            </div>
+                        {% endfor %}
+                        <div class="col-3">
+                            <br/>
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                    </div>
+                </form>
+                <br/>
+    </div>
+                <br/>
+
+
+                 <table id="table-notificacoes" class="table mb-0">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th># Notificação</th>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Data de nascimento</th>
+                        <th>Estado do teste</th>
+                        <th>Resultado do teste</th>
+                        <th>Estabelecimento</th>
+                        <th># GAL</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in object_list %}
+                        <tr>
+                            <td>
+                                <span class="modal-trigger notificacao-detalhe-modal-trigger" data-notificacao="{{ obj.pk }}"><i class="fas fa-fw fa-search"></i></span>
+                            </td>
+                            <td>{{ obj.numero }}</td>
+                            <td>{{ obj.id }}</td>
+                            <td>{{ obj.dados.nome_completo }}</td>
+                            <td>{{ obj.dados.data_de_nascimento|asdate|date:'d/m/Y'|default_if_none:'-' }}</td>
+                            <td>{{ obj.dados.estado_do_teste|default_if_none:'-' }}</td>
+                            <td>{{ obj.dados.resultado_do_teste|default_if_none:'Suspeito' }}</td>
+                            <td>{{ obj.estabelecimento_saude|default_if_none:'-' }}</td>
+                            <td>{{ obj.numero_gal|default_if_none:'' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                        <div class="row">
+                        <div class="col-4">
+                            <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até
+                                <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong>
+                                registros</p>
+                        </div>
+                        <div class="col-8">
+                            {% include 'paginator.html' %}
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'libs/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'libs/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    <!-- Table Editable plugin-->
+    <script src="{% static 'js/tabledit_custom.js' %}"></script>
+
+    <script src="{% static 'js/vigilancianatal.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#table-notificacoes').Tabledit({
+                deleteButton: false,
+                saveButton: true,
+                autoFocus: true,
+                buttons: {
+                    edit: {
+                        class: 'btn btn-sm btn-primary',
+                        html: '<i class="remixicon-edit-fill"></i> Editar',
+                        action: 'edit'
+                    }, save: {
+                        class: 'btn btn-sm btn-success',
+                        html: '<i class="remixicon-save-fill"></i> Salvar',
+                        action: 'save'
+                    }
+                },
+                columns: {
+                    identifier: [2, 'pk'],
+                    editable: [[8, 'numero_gal']]
+                },
+                onAjax: function (action, serialize) {
+                    data = JSON.parse('{"' + decodeURI(serialize).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}')
+                    response = false
+                    return $.ajax('{% url "api:notificacao_gal" 9999 %}'.replace('9999', data.pk), {
+                        data: serialize, method: 'PATCH', beforeSend: function (request) {
+                            request.setRequestHeader('X-CSRFToken', Cookies.get('csrftoken'))
+                        }
+                    })
+                },
+                onFail: function (e) {
+                    if (e.responseJSON.numero_gal) {
+                        alert('Certifique-se de que o número GAL contém 12 dígitos')
+                    } else {
+                        alert('Erro ao se comunicar com o servidor.')
+                    }
+                }
+            });
+
+
+            reloadTriggers();
+
+            $('#texto').on('keyup', function (e) {
+                table.search(this.value).draw()
+            })
+        });
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags base_tags modal %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Importação de dados' }}</h2>
+                <p>Abaixo você poderá visualizar as importações realizadas das bases de dados para o Salus.</p>
+
+                <div class="tablesaw-overflow">
+                    <table id="table-notificacoes" class="table table-centered">
+                        <thead>
+                        <tr>
+                            <th>Data/hora</th>
+                            <th>Modo de importação</th>
+                            <th>Usuário</th>
+                            <th>Estado</th>
+                            <th>Ação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for upload_importacao in object_list %}
+                            <tr>
+                                <td data-sort="{{ upload_importacao.datahora|date:'Ymd' }}">{{ upload_importacao.datahora }}</td>
+                                <td>{{ upload_importacao.get_tipo_display }}</td>
+                                <td>
+                                    {% if  upload_importacao.usuario %}
+                                        {{ upload_importacao.usuario }}
+                                    {% else %}
+                                        Sistema
+                                    {% endif %}
+                                </td>
+                                <td>{{ upload_importacao.status_processamento_display }}</td>
+                                <td>
+                                    {% if upload_importacao.processado %}
+                                        <a href="#"
+                                           data-target="{% url 'administracao:visualizar_uploadimportacao' upload_importacao.id %}"
+                                           class="mostrar-modal btn btn-primary">Ver resultado do processamento</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.bootstrap4.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('table').dataTable({
+                stateSave: false,
+                order: [[0, "desc"]],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json',
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"
+                    }
+                },
+                drawCallback: function () {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                }
+            });
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

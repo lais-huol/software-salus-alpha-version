@@ -1,0 +1,39 @@
+{% extends 'base_modal.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+{% block cabecalho %}
+    <h3 class="modal-title" id="exampleModalLabel">{{ titulo|default:'Formulário' }}</h3>
+{% endblock %}
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <div class="row">
+                    <p>{{ texto }}</p>
+                </div>
+                <div class="row">
+                    <form action="" id="formulario" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|bootstrap }}
+                        <input type="submit" id="submit" class="btn btn-primary" value="{% trans "Submeter" %}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{#<div class="modal-footer">#}
+{#    <a class="btn btn-secondary notificacao-alterar-gal" data-notificacao="{{ object.pk }}" data-target="#baseModal" href="#">Alterar GAL</a>#}
+{#    <a class="btn btn-secondary monitoramento-detalhe-modal-trigger" data-monitoramento="{{ object.pk }}"  href="#">Novo Monitoramento</a>#}
+{#</div>#}
+
+
+{% block scripts %}
+    <script type="text/javascript">
+    $(document).ready(function () {
+            $("#formulario").submit(function () {
+                $("#submit").attr("disabled", true).val("Submetendo...");
+                return true;
+            });
+        });
+    </script>
+{% endblock %}

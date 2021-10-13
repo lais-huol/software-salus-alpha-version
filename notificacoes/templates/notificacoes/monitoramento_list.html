@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags base_tags modal %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Monitoramento' }}</h2>
+                <p>Abaixo você poderá buscar e visualizar os monitoramentos sobre as notificações do e-SUS VE.</p>
+
+                <form>
+                    <div class="form-row">
+                        {% for field in form %}
+                            <div class="col-4">
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field.as_widget }}
+                            </div>
+                        {% endfor %}
+                        <div class="col-3">
+                            <br/>
+                            <button type="submit" class="btn btn-primary">Filtrar</button>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                    </div>
+                </form>
+                <br/>
+                <div class="tablesaw-overflow">
+                    <table id="table-notificacoes" class="tablesaw tablesaw-columntoggle"
+                           data-tablesaw-mode="columntoggle"
+                           data-tablesaw-minimap>
+                        <thead>
+                        <tr>
+                            <th data-tablesaw-priority="persist"></th>
+                            <th data-tablesaw-priority="persist">Data de investigação</th>
+                            <th data-tablesaw-priority="persist">Nome</th>
+                            <th data-tablesaw-priority="4">Resultado do teste</th>
+                            <th data-tablesaw-priority="6">Data da notificação</th>
+                            <th data-tablesaw-priority="3">Estabelecimento de saúde</th>
+                            <th data-tablesaw-priority="persist">Operador</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for monitoramento in object_list %}
+                            <tr>
+                                <th scope="row" data-toggle="collapse" data-target="#accordion-{{ forloop.counter }}"
+                                    class="clickable"><i class="fa fa-plus-circle"></i></th>
+                                <td>
+                                <span class="modal-trigger notificacao-detalhe-modal-trigger"
+                                      data-notificacao="{{ monitoramento.notificacao.pk }}"
+                                      data-target="{% url 'notificacoes:visualizar' monitoramento.notificacao.numero %}">
+                                    {% with monitoramento.criado_em as di %}
+                                        {{ monitoramento.data_de_investigacao|date:'d/m/Y' }}
+                                        <i class="fas fa-fw fa-search"></i>
+                                    {% endwith %}
+                                    {% if not monitoramento.dados %}
+                                        <br/><span class="badge badge-danger">sem contato</span>
+                                    {% endif %}
+                                </span>
+                                </td>
+                                <td>{{ monitoramento.notificacao.dados.nome_completo }}
+                                    <br/>{{ monitoramento.notificacao.dados.telefone_celular|default_if_none:'<i>sem telefone</i>' }}
+                                </td>
+                                <td>{{ monitoramento.notificacao.dados.resultado_do_teste|default_if_none:'---' }}</td>
+                                <td>{{ monitoramento.notificacao.data|date:'d/m/Y' }}
+                                    (há {{ monitoramento.notificacao.data|asdays }})
+                                </td>
+                                <td>{{ monitoramento.notificacao.estabelecimento_saude.dados_cnes.noFantasia|default_if_none:'---' }}</td>
+                                <td>
+                                     {{ monitoramento.criado_por.nome }}<br/>em {{ monitoramento.criado_em|date:"SHORT_DATETIME_FORMAT" }}
+                                </td>
+
+                            </tr>
+                            <tr class="hide-table-padding">
+                                <td colspan="7">
+                                    <div id="accordion-{{ forloop.counter }}" class="collapse in p-3">
+                                        <div class="row">
+                                            <div class="col-12"><h4>Detalhes do monitoramento</h4></div>
+                                            {% with monitoramento.dados_display as dados %}
+                                                {% for k, v in dados.items %}
+                                                    {% campo_modal k v %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até
+                            <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong>
+                            registros</p>
+                    </div>
+                    <div class="col-8">
+                        {% include 'paginator.html' %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/tablesaw/tablesaw.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.jquery.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.init.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select').select2();
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

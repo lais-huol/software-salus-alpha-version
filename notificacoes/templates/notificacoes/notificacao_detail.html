@@ -1,0 +1,281 @@
+{% extends 'base_modal.html' %}
+{% load base_tags modal static %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">{{ object.get_fonte_dados_display }} {{ object.numero }} - {{ object.data|date:'d/m/Y' }}</h3>
+    {% if perms.notificacoes.pode_alterar_o_gal %}
+        <a class="btn btn-secondary ml-4" data-notificacao="{{ object.pk }}"
+           href="{% url 'notificacoes:alterar_gal' object.pk %}">Registrar nº requisição GAL</a>
+    {% endif %}
+    {% if not object.estah_encerrada %}
+        <a class="btn btn-secondary ml-1" data-monitoramento="{{ object.pk }}"
+           href="{% url 'notificacoes:novo_monitoramento' object.pk %}">Novo Monitoramento</a>
+    {% endif %}
+    {% if object.pode_registrar_obito %}
+        <a class="btn btn-secondary ml-1" target="_parent"
+           href="{% url 'notificacoes:registrar_obito' object.pessoa.cpf %}">Registrar óbito</a>
+
+    {% endif %}
+{% endblock %}
+
+{% block conteudo %}
+    <ul class="nav nav-pills">
+        {% for nome in categorias %}
+            <li class="nav-item">
+                <a class="nav-link {% if forloop.counter == 1 %}active{% endif %}"
+                   id="pills-{{ nome|slugify }}-tab"
+                   href="#pills-{{ nome|slugify }}"
+                   data-toggle="pill"
+                   role="tab">
+                    {{ nome }}
+                </a>
+            </li>
+        {% endfor %}
+        <li class="nav-item">
+            <a class="nav-link"
+               id="pills-sintomas-e-morbidades-tab"
+               href="#pills-sintomas-e-morbidades"
+               data-toggle="pill"
+               role="tab">
+                Sintomas e Morbidades
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="pills-dados-complementares-tab"
+               href="#pills-dados-complementares"
+               data-toggle="pill"
+               role="tab">
+                Dados complementares
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="pills-monitoramento-tab"
+               href="#pills-monitoramento"
+               data-toggle="pill"
+               role="tab">
+                Monitoramento
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="pills-dados-fonte-tab"
+               href="#pills-dados-fonte"
+               data-toggle="pill"
+               role="tab">
+                Dados {{ object.get_fonte_dados_display }}
+            </a>
+        </li>
+        {% if object.estah_encerrada %}
+            <li class="nav-item">
+                <a class="nav-link"
+                   id="pills-encerramento-tab"
+                   href="#pills-encerramento"
+                   data-toggle="pill"
+                   role="tab">
+                    Encerramento
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        {% for nome, campos in categorias.items %}
+            <div class="tab-pane {% if forloop.counter == 1 %}show active{% endif %}"
+                 id="pills-{{ nome|slugify }}"
+                 role="tabpanel">
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <div class="row">
+                            {% for campo in campos %}
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label">
+                                            {{ object.MAPEAMENTO_COLUNAS|getattribute:campo }}</label>
+                                        <div>
+                                            <span>
+                                                {% if campo in datas or campo in datas_dias %}
+                                                    {{ object.dados|getattribute:campo|default_if_none:'---'|asdate|date:'d/m/Y' }}
+                                                {% else %}
+                                                    {{ object.dados|getattribute:campo|default_if_none:'---' }}
+                                                {% endif %}
+                                                {% if campo in datas %}
+                                                    (
+                                                    {{ object.dados|getattribute:campo|default_if_none:'---'|asdate|timesince }}
+                                                    )
+                                                {% endif %}
+                                                {% if campo in datas_dias %}
+                                                    (
+                                                    {{ object.dados|getattribute:campo|default_if_none:'---'|asdate|asdays }}
+                                                    )
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="tab-pane"
+         id="pills-sintomas-e-morbidades"
+         role="tabpanel">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md">
+                            <h4>Sintomas</h4>
+                            {% if sintomas %}
+                                <ul>
+                                {% for sintoma in sintomas %}
+                                    <li>{{ sintoma }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>nenhum sintoma.</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md">
+                            <h4>Morbidades</h4>
+                            {% if morbidades %}
+                                <ul>
+                                {% for morbidade in morbidades %}
+                                    <li>{{ morbidade }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>nenhuma morbidade.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane"
+         id="pills-dados-fonte"
+         role="tabpanel">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <h4>Dados {{ object.get_fonte_dados_display }}</h4>
+                    <div id="json-dados-fonte" class="json-view"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane"
+             id="pills-dados-complementares"
+             role="tabpanel">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <h4>Dados adicionais da notificação</h4>
+                    <div class="row">
+                        {% campo_modal 'Nº GAL' object.numero_gal|default_if_none:'---' %}
+                        {% campo_modal 'Bairro' object.bairro.nome %}
+                        {% campo_modal 'Unidade Notificadora' object.estabelecimento_saude.nome %}
+                    </div>
+                    {% with object.get_dados_pessoais_modificados_no_monitoramento as dados_pessoais %}
+                        <div class="row">
+                            {% for chave, valor in dados_pessoais %}
+                                {% with object.MAPEAMENTO_COLUNAS|getattribute:chave as titulo %}
+                                    {% campo_modal titulo valor %}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    {% endwith %}
+                    {% if object.paciente_internado %}
+                        <h4>Dados de internação</h4>
+                        <div class="row">
+                            {% campo_modal 'Nome do paciente' object.paciente_internado.dados_censo_leitos|getornone:'nome_do_paciente' %}
+                            {% campo_modal 'Idade' object.paciente_internado.dados_censo_leitos|getornone:'idade' %}
+                            {% campo_modal 'Unidade Notificadora' object.paciente_internado.dados_censo_leitos|getornone:'unidade' %}
+                            {% campo_modal 'Estabelecimento de Saúde' object.paciente_internado.estabelecimento_saude.nome %}
+                            {% campo_modal 'Tipo de leito' object.paciente_internado.dados_censo_leitos|getornone:'tipo_de_leito' %}
+                            {% campo_modal 'Data de internação' object.paciente_internado.dados_censo_leitos|getornone:'data_de_internacao'|default_if_none:'---' %}
+                            {% campo_modal 'Data de liberação' object.paciente_internado.dados_censo_leitos|getornone:'data_de_liberacao'|default_if_none:'---' %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane"
+             id="pills-monitoramento"
+             role="tabpanel">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <div class="accordion mb-3" id="accordionMonitoramento">
+                        {% for monitoramento in object.monitoramento_set.all %}
+                            <div class="card mb-1">
+                                <div class="card-header" id="headingMonitoramento{{ monitoramento.id }}">
+                                    <h5 class="my-0">
+                                        <a class="text-primary" data-toggle="collapse"
+                                           href="#collapseMonitoramento{{ monitoramento.id }}"
+                                           aria-expanded="{% if not forloop.counter0 %}true{% else %}false{% endif %}"
+                                           aria-controls="collapseMonitoramento{{ monitoramento.id }}">
+                                            {{ monitoramento.data_de_investigacao|date:"SHORT_DATE_FORMAT"}}
+                                            (há {{ monitoramento.data_de_investigacao|asdays }}) -
+                                            {{ monitoramento.dados.como_se_sente|default_if_none:'-' }}
+                                            {% if not monitoramento.dados %}
+                                                <span class="badge badge-danger">sem contato</span>
+                                            {% endif %}
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="collapseMonitoramento{{ monitoramento.id }}"
+                                     class="collapse {% if not forloop.counter0 %}show{% endif %}"
+                                     aria-labelledby="headingMonitoramento{{ monitoramento.id }}"
+                                     data-parent="#accordionMonitoramento" style="">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            {% with monitoramento.dados_display as dados %}
+                                                {% for k, v in dados.items %}
+                                                    {% campo_modal k v %}
+                                                {% endfor %}
+                                            {% endwith %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p>Não há monitoramentos para esta notificação.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane"
+             id="pills-encerramento"
+             role="tabpanel">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <h4>Dados do Encerramento da notificação</h4>
+                    <div class="row">
+                        {% campo_modal 'Motivo Encerramento' object.get_motivo_encerramento_display %}
+                        {% if object.encerrada_motivo == 1 %}
+                            {% campo_modal 'Data da Cura' object.data_do_encerramento %}
+                        {% else %}
+                            {% campo_modal 'Data do Óbito' object.data_do_encerramento %}
+                        {% endif %}
+                        {% campo_modal 'Observações' object.encerrada_observacoes %}
+                        {% campo_modal 'Encerramento cadastrado em ' object.encerrada_em %}
+                        {% campo_modal 'Encerramento cadastrado por' object.encerrada_por.nome %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'rest_framework/docs/css/jquery.json-view.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'rest_framework/docs/js/jquery.json-view.min.js' %}"></script>
+    <script src="{% static 'rest_framework/docs/js/highlight.pack.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#json-dados-fonte").jsonView({{ object.dados|asjson|safe }});
+        });
+    </script>
+{% endblock scripts %}

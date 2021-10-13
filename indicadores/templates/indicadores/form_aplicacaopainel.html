@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <div class="row">
+                    <h2>{{ titulo|default:'Formulário' }}</h2>
+                </div>
+                <div class="row">
+                    <p>{{ texto }}</p>
+                </div>
+                <div class="row">
+                    <form action="" id="formulario" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <input type="button" id="preview" class="btn btn-info" value="{% trans "Pré-visualizar" %}"
+                               disabled/>
+                        <input type="submit" id="submit" class="btn btn-primary" value="{% trans "Submeter" %}"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    {{ form.media }}
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').select2()
+            reloadTriggers()
+            $("#formulario").submit(function () {
+                $("#submit").attr("disabled", true).val("Submetendo...");
+                return true;
+            });
+
+
+            $(document).on('click', '#preview', function (ev) {
+                url = "{% url 'base:carregando' %}"
+                $("#iframe-comp").attr('src', url)
+                url = "{% url 'indicadores:previa_boletim' %}"
+                let modal = $("#modal-iframe");
+                let params = $("#formulario").serialize();
+                params.data_do_boletim = params.data
+                params = new URLSearchParams(params).toString();
+                modal.modal('show');
+                setTimeout(function () {
+                    $("#iframe-comp").attr('src', url + '?' + params)
+                }, 1000)
+            })
+
+            $('#formulario :input').change(function (ev) {
+                let isFormValid = true;
+                $("#id_modelo,#data_do_boletim,#semana_boletim").each(function () {
+                    if ($.trim($(this).val()).length === 0)
+                        isFormValid = false;
+                });
+                if (isFormValid)
+                    $('#preview').removeAttr("disabled")
+                else
+                    $('#preview').attr("disabled", "disabled")
+            });
+        });
+    </script>
+{% endblock %}

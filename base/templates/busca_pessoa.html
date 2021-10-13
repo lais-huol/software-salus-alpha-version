@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block conteudo %}
+    <br/>
+    <div class="row form-group justify-content-md-center">
+        <div class="col-md-8 card-box">
+            <form id="form" class="form-row">
+                <div>
+                    <h2>Busca de pacientes</h2>
+
+                    <p>
+                        Realize a busca de pacientes para acessar informações através dos módulos do Salus.
+                    </p>
+                </div>
+                <div class="form-group col-md-8">
+                    <select id="paciente" name="paciente" class="busca form-control" required></select>
+                </div>
+                                <div class="form-group col-md-4 justify-content-md-center">
+                                    <button id="selecionar" class="btn btn-bordered-primary btn-block">Selecionar paciente</button>
+                                </div>
+                <div class="form-group col-md-8">
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/select2/pt-BR.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = "{% url 'base:pessoa' '0000' %}"
+            $(".busca").select2({
+                placeholder: 'Digite o nome, CPF ou CNS de um paciente',
+                language: "pt-BR",
+                minimumInputLength: 11,
+                ajax: {
+                    url: '{% url 'api:busca_paciente' %}',
+                    dataType: 'json',
+                    data: function (params) {
+                        return {
+                            busca: params.term
+                        };
+                    },
+                    processResults: function (data) {
+                        data = $.map(data, function (val, i) {
+                            val.id = val.cpf
+                            val.text = `${val.nome} - ${val.data_nascimento}`
+                            return val
+                        });
+                        debugger;
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+
+            $("#form").submit(function (event) {
+                var val = $('#paciente').val()
+                debugger
+                if (val)
+                    window.location.href = url.replace('0000', val)
+                else
+                    alert('Selecione um paciente')
+                event.preventDefault();
+            });
+
+        })
+        ;
+
+    </script>
+{% endblock scripts %}

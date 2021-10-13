@@ -1,0 +1,140 @@
+{% load static base_tags %}
+<div class="topbar-menu">
+    <div class="container-fluid">
+        <div id="navigation">
+            <!-- Navigation Menu-->
+            <ul class="navigation-menu">
+                {% if user.is_authenticated %}
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="remixicon-dashboard-fill"></i>Indicadores
+                            <div class="arrow-down"></div>
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{% url 'indicadores:inicio' %}">
+                                    Principais indicadores
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'indicadores:gerais' %}">
+                                    Catálogo
+                                </a>
+                            </li>
+                            {#                            <li>#}
+                            {#                                <a href="{% url 'indicadores:painel_publico' %}">#}
+                            {#                                    Painel público#}
+                            {#                                </a>#}
+                            {#                            </li>#}
+                            <li>
+                                <a href="{% url 'indicadores:listar_boletins' %}">
+                                    Boletim epidemiológico
+                                </a>
+                            </li>
+                            {#                            <li>#}
+                            {#                                <a href="{% url 'indicadores:boletim' %}">#}
+                            {#                                    Boletim epidemiológico#}
+                            {#                                </a>#}
+                            {#                            </li>#}
+                        </ul>
+                    </li>
+
+
+                    <li class="has-submenu">
+                        <a href="{% url 'base:busca_pessoa' %}">
+                            <i class="remixicon-user-3-fill"></i>Pacientes
+                            <div class="arrow-down"></div>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <a href="{% url 'base:busca_pessoa' %}">
+                                    Buscar paciente
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {% for menu in menus %}
+                        {{ menu }}
+                    {% endfor %}
+
+
+                    <li class="has-submenu">
+                        <a href="#">
+                            <i class="remixicon-apps-2-fill"></i>Serviços
+                            <div class="arrow-down"></div>
+                        </a>
+
+                        <ul class="submenu">
+                            {% if user.is_superuser or user.is_usuario_vigilancia and user.is_gestor or user.is_usuario_ab and user.is_gestor  or user.is_usuario_distrito and user.is_gestor %}
+                                <li class="has-submenu">
+                                    <a href="#">Internações
+                                        <div class="arrow-down"></div>
+                                    </a>
+                                    <ul class="submenu">
+                                        <li>
+                                            <a href="{% url 'notificacoes:listar_pacientes' 'I' %}">Listar
+                                                internados</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'notificacoes:listar_pacientes' 'A' %}">Listar liberados</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'notificacoes:listar_pacientes' 'O' %}">Listar óbitos</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'base:localizasus' %}">LocalizaSUS</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    {% if user.is_superuser or user.is_usuario_vigilancia and user.is_gestor %}
+                        <li class="has-submenu">
+                            <a href="#">
+                                <i class="remixicon-admin-fill"></i>Administração
+                                <div class="arrow-down"></div>
+                            </a>
+
+                            <ul class="submenu">
+                                <li>
+                                    <a href="{% url 'administracao:listar_distritos' %}">Distritos</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'administracao:listar_bairros' %}">Bairros</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'administracao:listar_habitacoes' %}">Habitações de bairros</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'administracao:listar_associacoesbairro' %}">Associações de
+                                        bairros</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'administracao:listar_pacientesinternados' %}">Pacientes
+                                        internados</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'administracao:listar_uploadimportacao' %}">Importação de dados</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'indicadores:listar_modelos_painel' %}">Modelos de painéis</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+
+            </ul>
+            <!-- End navigation menu -->
+
+            <div class="clearfix"></div>
+        </div>
+        <!-- end #navigation -->
+    </div>
+    <!-- end container -->
+</div>

@@ -1,0 +1,19 @@
+{% extends "registration/base.html" %}
+
+{% load static bootstrap %}
+
+{% block title %}
+    <p class="text-muted mb-4 mt-3">Digite seu CPF e senha para acessar</p>
+{% endblock %}
+
+{% block content %}
+    <form method="post">{% csrf_token %}
+        {{ form|bootstrap }}
+        <div class="form-group mb-0 text-center">
+            <button class="btn btn-primary btn-block" type="submit"> Entrar </button>
+        </div>
+    </form>
+    <div class="form-group mt-3 text-center">
+        <a href="{% url 'password_reset' %}">Esqueceu sua senha?</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load i18n static crispy_forms_tags %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <div class="row">
+                    <h2>{{ titulo|default:'Formulário' }}</h2>
+                </div>
+
+
+                <div class="row">
+                    <p>Passo {{ wizard.steps.step1 }} de {{ wizard.steps.count }}</p>
+                </div>
+
+                <div class="row">
+
+                    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+                        <table>
+                            {{ wizard.management_form }}
+                            {% if wizard.form.forms %}
+                                {{ wizard.form.management_form }}
+                                {% for form in wizard.form.forms %}
+                                    {{ form }}
+                                {% endfor %}
+                            {% else %}
+                                {{ wizard.form|crispy }}
+                            {% endif %}
+                        </table>
+                        {% if wizard.steps.prev %}
+                            <button name="wizard_goto_step" class="btn btn-secondary" type="submit"
+                                    value="{{ wizard.steps.prev }}">{% trans "Voltar" %}</button>
+                        {% endif %}
+                        <input type="submit" class="btn btn-secondary" value="{% trans "Submeter" %}"/>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

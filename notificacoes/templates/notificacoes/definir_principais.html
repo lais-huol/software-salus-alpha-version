@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% load base_tags notificacao_tags %}
+
+{% block conteudo %}
+    <style>
+        .form-check-input, .form-check-label {
+            cursor: pointer;
+        }
+    </style>
+    <h1>Definir notificações principais</h1>
+    <div class="alert alert-warning mt-4">
+        <h3>Há {{ paginator.count }} agrupamento{{ paginator.count|pluralize }} de
+            notificaç{{ form.agrupamentos|length|pluralize:"ão,ões" }}</h3>
+        <p class="lead"><strong>ATENÇÃO:</strong> Para cada agrupamento, selecione a notificação que deve ser mantida
+            como ativa.
+            As notificações não selecionadas serão inativadas.</p>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form enctype="multipart/form-data" method="post" class="form">
+                {% csrf_token %}
+                {% for agrupamento in form.agrupamentos %}
+                    <div class="overflow-auto">
+
+                        <table class="table table-hover bg-white table-sm mb-0 mt-4">
+                            <thead>
+                            <tr class="table-primary">
+                                <th scope="col" colspan="{{ agrupamento.cols|length|add:1 }}">
+                                    {{ agrupamento.object_list.0.nome_completo }}
+                                    - {{ agrupamento.object_list.0.data_de_nascimento }}
+                                    ({{ agrupamento.object_list.0.data_de_nascimento|default_if_none:'---'|asdate|timesince }}),
+                                    notificado em {{ agrupamento.object_list.0.data_da_notificacao }}
+                                    (há {{ agrupamento.object_list.0.data_da_notificacao|asdate|asdays }})
+                                </th>
+                            </tr>
+                            <tr class="text-muted">
+                                <th scope="col">Selecionar</th>
+                                {% for col in agrupamento.cols %}
+                                    <th scope="col">{{ col.label }}</th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for obj in agrupamento.object_list %}
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input class="form-check-input"
+                                                   type="checkbox"
+                                                   name="{{ agrupamento.field_name }}"
+                                                   id="{{ agrupamento.field_name }}_{{ forloop.counter }}"
+                                                   value="{{ obj.pk }}">
+                                            <label class="form-check-label"
+                                                   for="{{ agrupamento.field_name }}_{{ forloop.counter }}">
+                                                {{ obj.numero_da_notificacao }} ({{ obj.fonte_dados }})
+                                            </label>
+                                            <span class="modal-trigger notificacao-detalhe-modal-trigger"
+                                                  data-notificacao="{{ obj.pk }}">
+                                                <i class="fas fa-fw fa-search"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    {% for col in agrupamento.cols %}
+                                        <td>{{ obj|getattribute:col.name|default:"-" }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if agrupamento.field_name in form.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {% for err in form.errors|getattribute:agrupamento.field_name %}
+                                    {{ err }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+                <input type="submit" class="btn btn-primary btn-lg mt-3" value="Salvar"/>
+
+                <div class="row">
+                    <div class="col-4">
+                        <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até
+                            <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong>
+                            registros</p>
+                    </div>
+                    <div class="col-8">
+                        {% include 'paginator.html' %}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

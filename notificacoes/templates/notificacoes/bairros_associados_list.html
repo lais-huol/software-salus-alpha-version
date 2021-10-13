@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags crispy_forms_utils crispy_forms_field crispy_forms_filters i18n base_tags %}
+
+{% block conteudo %}
+
+            <div class="alert alert-warning mt-4">
+            {% if label_bairro %}
+                 <h3>Há {{ bairros_associados|length }}  associaç{{ bairros_associados|length|pluralize:"ão,ões"}} realizada{{ bairros_associados|length|pluralize }} para o bairro {{ label_bairro|title }}</h3>
+            {% else %}
+                <h3>Há {{ bairros_associados|length }} bairro{{ bairros_associados|length|pluralize}} com associaç{{ bairros_associados|length|pluralize:"ão,ões"}} realizada{{ bairros_associados|length|pluralize }}</h3>
+            {% endif %}
+            <p class="lead"><strong>ATENÇÃO:</strong> Você deve clicar em enviar para registrar as
+                associações desta página, caso vá para outra página sem 'Enviar' as associações da
+                página atual serão descartadas.</p>
+            </div>
+            <div><a href="{% url 'notificacoes:associar_bairros'%}">IR PARA BAIRROS PENDENTES DE ASSOCIAÇÃO.</a></div>
+
+            <form method="get">
+            {{ filter.form.as_p }}
+            <button type="submit">Filtrar</button>
+            <a  href={% url 'notificacoes:bairros_associados'%}>Limpar filtros</a>
+            </form>
+                    <div class="card-box">
+                        <h4>Alterar bairros associados</h4>
+                        <p>Abaixo você poderá visualizar os bairros que já estão associados e alterar a associação existente.</p>
+                        <form enctype="multipart/form-data" method="post">
+                            {% csrf_token %}
+                            <table class="table mb-0">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Descrição do Endereço</th>
+                                    <th>Bairro associado atualmente</th>
+                                    <th>Novo Bairro a associar</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for field in form %}
+                                    <tr>
+                                    <th scope="row">{% slice_by_find field.label '|' 'prior' %}</th>
+                                    <th scope="row">{% slice_by_find field.label '|' 'next'  %}</th>
+                                    <td>{{ field.as_widget }}</td>
+                                    </tr>
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="col-8">
+                            {% include 'paginator.html' %}
+                             </div>
+                            <input type="submit" class="btn btn-secondary" value="{% trans "Enviar" %}"/>
+                        </form>
+                    </div>
+
+            </div>
+
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    {{ dataset_rows|json_script:"dataSetRows" }}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("select").select2({
+                placeholder: 'Selecione um bairro correspondente'
+            });
+
+            $("input[type='checkbox']").on('change', function () {
+                var select_id = $(this).attr('id').substring(0, $(this).attr('id').length-6)
+                $(`select[id="${select_id}"]`).prop('disabled', this.checked).val(null).trigger('change');
+            });
+        });
+
+    </script>
+{% endblock scripts %}

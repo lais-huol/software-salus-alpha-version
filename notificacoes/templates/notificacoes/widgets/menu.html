@@ -1,0 +1,82 @@
+{% load static base_tags %}
+
+<li class="has-submenu">
+    <a href="#">
+        <i class="remixicon-notification-fill"></i>Notificações COVID
+        <div class="arrow-down"></div>
+    </a>
+    <ul class="submenu">
+        <li>
+            <a href="{% url 'notificacoes:listar' %}">Listar ativas</a>
+        </li>
+        <li>
+            <a href="{% url 'notificacoes:listar_recentes' %}">Listar ativas dos últimos 14 dias</a>
+        </li>
+        <li>
+            <a href="{% url 'notificacoes:listar_pendentes' %}">Listar
+                pendentes</a>
+        </li>
+        {% if perms.notificacoes.pode_definir_notificacoes_principais %}
+            <li>
+                <a href="{% url 'notificacoes:definir_principais' %}">Definir notificações
+                    principais</a>
+            </li>
+        {% endif %}
+        {% if perms.notificacoes.pode_alterar_o_gal %}
+            <li>
+                <a href="{% url 'notificacoes:listar_gal' %}">Registrar nº requisição GAL</a>
+            </li>
+        {% endif %}
+        {% if perms.notificacoes.pode_associar_pacientes or perms.notificacoes.pode_associar_estabelecimentos %}
+            <li class="has-submenu">
+                <a href="#">Internações
+                    <div class="arrow-down"></div>
+                </a>
+
+                <ul class="submenu">
+                    {% if perms.notificacoes.pode_associar_pacientes %}
+                        <li>
+                            <a href="{% url 'notificacoes:associar_pacientes' %}">Associar pacientes</a>
+                        </li>
+                    {% endif %}
+                    {% if perms.notificacoes.pode_associar_estabelecimentos %}
+                        <li>
+                            <a href="{% url 'notificacoes:associar_estabelecimentos' %}">Associar Nomes
+                                de Estabelecimento</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </li>
+        {% endif %}
+        {% if IMPORTAR_NOTIFICACOES_VIA_CSV and perms.notificacoes.pode_importar_notificacoes %}
+            <li>
+                <a href="{% url 'notificacoes:importar_esusve' %}">Importar dados (e-SUS VE)</a>
+            </li>
+        {% endif %}
+        {% if perms.notificacoes.pode_importar_notificacoes %}
+            <li>
+                <a href="{% url 'notificacoes:importar_sivep' %}">Importar dados (Sivep-Gripe)</a>
+            </li>
+        {% endif %}
+        {% if perms.notificacoes.pode_associar_bairros %}
+            <li>
+                <a href="{% url 'notificacoes:associar_bairros' %}">Associar bairros</a>
+            </li>
+            <li>
+                <a href="{% url 'notificacoes:associar_bairros_individuais' %}">Associar notificações à bairros</a>
+            </li>
+        {% endif %}
+        {% if perms.notificacoes.pode_associar_operadores %}
+            <li>
+                <a href="{% url 'notificacoes:associar_operador_cnes' %}">Associar operador ao
+                    estabelecimento</a>
+            </li>
+        {% endif %}
+        <li>
+            <a href="{% url 'notificacoes:listar_monitoramentos' %}">Monitoramentos</a>
+        </li>
+        <li>
+            <a href="{% url 'notificacoes:listar_obitos' %}">Óbitos</a>
+        </li>
+    </ul>
+</li>

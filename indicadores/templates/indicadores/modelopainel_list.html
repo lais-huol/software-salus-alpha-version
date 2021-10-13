@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags base_tags modal %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Modelos de painéis' }}</h2>
+                <p>Abaixo você poderá buscar e visualizar os modelos de painéis que podem ser utilizados para agregar informações.</p>
+                <p><a href="{% url 'indicadores:novo_modelo_painel' %}" class="btn btn-secondary">Criar modelo de painel</a></p>
+
+                <div class="tablesaw-overflow">
+                    <table id="table-notificacoes" class="tablesaw tablesaw-columntoggle"
+                           data-tablesaw-mode="columntoggle"
+                           data-tablesaw-minimap>
+                        <thead>
+                        <tr>
+                            <th data-tablesaw-priority="persist">Nome do painel</th>
+                            <th data-tablesaw-priority="persist">Tipo</th>
+                            <th data-tablesaw-priority="persist">Ação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for painel in object_list %}
+                            <tr>
+                                <th scope="row">{{ painel.nome }}</th>
+                                <td>{{ painel.get_tipo_display }}</td>
+                                <td>
+                                    {% if not painel.esta_sendo_usado %}
+                                    <a href="{% url 'indicadores:remover_modelo_painel' painel.id %}" class="btn btn-danger">Remover</a>
+                                    <a href="{% url 'indicadores:editar_modelo_painel' painel.id %}" class="btn btn-primary">Editar</a>
+                                    {% endif %}
+                                    <a href="{% url 'indicadores:clonar_modelo_painel' painel.id %}" class="btn btn-purple">Clonar</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até
+                            <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong>
+                            registros</p>
+                    </div>
+                    <div class="col-8">
+                        {% include 'paginator.html' %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/tablesaw/tablesaw.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.jquery.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.init.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select').select2();
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

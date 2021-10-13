@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags crispy_forms_utils crispy_forms_field crispy_forms_filters i18n base_tags %}
+
+{% block conteudo %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card-box">
+                <h4>{{ titulo }}</h4>
+                <p>Abaixo você poderá visualizar os pacientes com suas informações correspondentes.</p>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="municipio">
+                            Município
+                        </label>
+                        <select id="municipio" class="form-control">
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="estabelecimento_saude">
+                            Estabelecimento de saúde
+                        </label>
+                        <select id="estabelecimento_saude" class="form-control">
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="diagnostico">
+                            Diagnóstico
+                        </label>
+                        <select id="diagnostico" class="form-control">
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+                    {% if tipo_obito %}
+                        <div class="col">
+                            <label for="obito_confirmado">
+                                Óbito confirmado
+                            </label>
+                            <select id="obito_confirmado" class="form-control">
+                                <option value="">Selecione</option>
+                            </select>
+                        </div>
+                    {% endif %}
+                </div>
+                <table class="table mb-0">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Estabelecimento</th>
+                        <th>Nome do Paciente</th>
+                        <th>Data de Nascimento</th>
+                        <th>Município</th>
+                        <th>Data de admissão</th>
+                        <th>Data de liberação</th>
+                        <th>Tipo de leito</th>
+                        <th>Requisição GAL</th>
+                        <th>Diagnóstico</th>
+                        {% if tipo_obito %}
+                            <th>Óbito confirmado</th>
+                            <th>Data do Óbito</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for paciente in pacientes %}
+                        <tr>
+                            <th scope="row">{{ paciente.dados_censo_leitos.unidade_nome }}</th>
+                            <td>{{ paciente.dados_censo_leitos.paciente_nome }}</td>
+                            <td>{{ paciente.dados_censo_leitos.paciente_data_nascimento }}</td>
+                            <td>{{ paciente.dados_censo_leitos.paciente_municipio_nome|default:"-" }}</td>
+                            <td>{{ paciente.dados_censo_leitos.internacao_admissao}} </td>
+                            <td>{{ paciente.dados_censo_leitos.internacao_liberacao|default:"-" }}</td>
+                            <td>{{ paciente.dados_censo_leitos.leito_tipo_leito }}</td>
+                            <td>{{ paciente.dados_censo_leitos.requisicao_gal|default:"-" }}</td>
+                            <td>{{ paciente.dados_censo_leitos.diagnostico }}</td>
+                            {% if tipo_obito %}
+                                <td>{{ paciente.data_do_obito|yesno:'Sim,Não' }}</td>
+                                <td>
+                                    {% if paciente.data_do_obito %}
+                                        <strong>{{ paciente.data_do_obito|date:"SHORT_DATE_FORMAT" }}</strong>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'libs/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'libs/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+
+    {{ dataset_rows|json_script:"dataSetRows" }}
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.table').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json",
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"
+                    }
+                },
+                columns: [
+                    {title: "Estabelecimento", filterWidget: 'estabelecimento_saude'},
+                    {title: "Nome do Paciente"},
+                    {title: "Data de Nascimento"},
+                    {title: "Município", filterWidget: 'municipio', selected: 'Natal'},
+                    {title: "Data de admissão"},
+                    {title: "Data de liberação"},
+                    {title: "Tipo de leito"},
+                    {title: "Requisição GAL"},
+                    {title: "Diagnóstico", filterWidget: 'diagnostico'},
+                    {% if tipo_obito %}
+                        {title: "Óbito confirmado", filterWidget: 'obito_confirmado', visible: false},
+                        {title: "Data do Óbito"},
+                    {% endif %}
+                ],
+                initComplete: function () {
+                    this.api().columns().every(function () {
+                        var column = this;
+
+                        var filterWidget = column.context[0].aoColumns[column[0][0]].filterWidget
+                        var selected = column.context[0].aoColumns[column[0][0]].selected
+
+                        var select = $(`#${filterWidget}`).on('change', function () {
+                            var val = $(this).val()
+                            column.search(val).draw();
+                        });
+
+                        column.data().unique().sort().each(function (d, j) {
+                            if (d === null)
+                                return
+                            var extra = d === selected?' selected ':''
+                            select.append('<option value="' + d + '"'+ extra+ '>' + d + '</option>')
+                        });
+
+                        select.trigger('change')
+                        select.select2()
+                    })
+                },
+            })
+
+            reloadTriggers()
+        });
+
+    </script>
+{% endblock scripts %}

@@ -1,0 +1,51 @@
+{% extends 'base_modal.html' %}
+{% load base_tags modal static %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Notificações COVID - {{ pessoa.nome }}</h3>
+{% endblock %}
+
+{% block conteudo %}
+    {% if notificacoes %}
+        <div class="card">
+            <div class="card-body">
+                <p>As seguintes notificações foram encontradas para este paciente:</p>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Data da notificação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for notificacao in notificacoes %}
+                            <tr>
+                                <th scope="row"><a href="{% url 'notificacoes:visualizar_todos' notificacao.pk %}"> <i
+                                        class="fas fa-fw fa-search"></i> {{ notificacao.numero }}</a></th>
+                                <td>{{ notificacao.data }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <h4>Não há notificações para este paciente.</h4>
+    {% endif %}
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'rest_framework/docs/css/jquery.json-view.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'rest_framework/docs/js/jquery.json-view.min.js' %}"></script>
+    <script src="{% static 'rest_framework/docs/js/highlight.pack.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#json-dados-fonte").jsonView({{ object.dados|asjson|safe }});
+        });
+    </script>
+{% endblock scripts %}

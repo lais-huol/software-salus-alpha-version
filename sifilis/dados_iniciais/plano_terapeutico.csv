@@ -1,0 +1,106 @@
+tratamento,cid,descricao_cid,medicamento,solucao,metodo,qtde_doses,orientacao,frequencia,und_frequencia,intervalo_doses,und_intervalo_doses,prazo_extra,und_prazo
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A510,Sífilis genital primária,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A510,Sífilis genital primária,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A510,Sífilis genital primária,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A510,Sífilis genital primária,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A510,Sífilis genital primária,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A510,Sífilis genital primária,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A511,Sífilis anal primária,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A511,Sífilis anal primária,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A511,Sífilis anal primária,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A511,Sífilis anal primária,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A511,Sífilis anal primária,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A511,Sífilis anal primária,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A512,Sífilis primária em outras localizações,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A512,Sífilis primária em outras localizações,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A512,Sífilis primária em outras localizações,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A512,Sífilis primária em outras localizações,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A512,Sífilis primária em outras localizações,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A512,Sífilis primária em outras localizações,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A513,Sífilis secundária da pele e das mucosas,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A513,Sífilis secundária da pele e das mucosas,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A513,Sífilis secundária da pele e das mucosas,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A513,Sífilis secundária da pele e das mucosas,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A513,Sífilis secundária da pele e das mucosas,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A513,Sífilis secundária da pele e das mucosas,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A514,Outras formas de sífilis secundária,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A514,Outras formas de sífilis secundária,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A514,Outras formas de sífilis secundária,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A514,Outras formas de sífilis secundária,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A514,Outras formas de sífilis secundária,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A514,Outras formas de sífilis secundária,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A515,Sífilis precoce latente,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A515,Sífilis precoce latente,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A515,Sífilis precoce latente,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A515,Sífilis precoce latente,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A515,Sífilis precoce latente,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A515,Sífilis precoce latente,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A519,Sífilis precoce não especificada,Penicilina G benzatina,"2,4 milhões UI",IM,1,"1,2 milhão UI em cada glúteo",0,hora,0,hora,0,hora
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A519,Sífilis precoce não especificada,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A519,Sífilis precoce não especificada,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A519,Sífilis precoce não especificada,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A519,Sífilis precoce não especificada,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"Sífilis primária, sífilis secundária e latente recente (até um ano de duração)",A519,Sífilis precoce não especificada,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A520,Sífilis cardiovascular,Penicilina G benzatina,"2,4 milhões UI",IM,3,"1,2 milhão UI em cada glúteo",1,dia,7,dia,3,semana
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A520,Sífilis cardiovascular,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A520,Sífilis cardiovascular,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A520,Sífilis cardiovascular,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A520,Sífilis cardiovascular,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A520,Sífilis cardiovascular,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A527,Outras formas de sífilis tardia sintomática,Penicilina G benzatina,"2,4 milhões UI",IM,3,"1,2 milhão UI em cada glúteo",1,dia,7,dia,3,semana
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A527,Outras formas de sífilis tardia sintomática,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A527,Outras formas de sífilis tardia sintomática,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A527,Outras formas de sífilis tardia sintomática,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A527,Outras formas de sífilis tardia sintomática,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A527,Outras formas de sífilis tardia sintomática,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A528,Sífilis tardia latente,Penicilina G benzatina,"2,4 milhões UI",IM,3,"1,2 milhão UI em cada glúteo",1,dia,7,dia,3,semana
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A528,Sífilis tardia latente,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A528,Sífilis tardia latente,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A528,Sífilis tardia latente,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A528,Sífilis tardia latente,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A528,Sífilis tardia latente,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A529,Sífilis tardia não especificada,Penicilina G benzatina,"2,4 milhões UI",IM,3,"1,2 milhão UI em cada glúteo",1,dia,7,dia,3,semana
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A529,Sífilis tardia não especificada,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A529,Sífilis tardia não especificada,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A529,Sífilis tardia não especificada,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A529,Sífilis tardia não especificada,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A529,Sífilis tardia não especificada,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A530,"Sífilis latente, não especificada se recente ou tardia",Penicilina G benzatina,"2,4 milhões UI",IM,3,"1,2 milhão UI em cada glúteo",1,dia,7,dia,3,semana
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A530,"Sífilis latente, não especificada se recente ou tardia",Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A530,"Sífilis latente, não especificada se recente ou tardia",Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A530,"Sífilis latente, não especificada se recente ou tardia",Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A530,"Sífilis latente, não especificada se recente ou tardia",Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A530,"Sífilis latente, não especificada se recente ou tardia",Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A539,Sífilis não especificada,Penicilina G benzatina,"2,4 milhões UI",IM,3,"1,2 milhão UI em cada glúteo",1,dia,7,dia,3,semana
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A539,Sífilis não especificada,Doxiciclina,100 mg,VO,30,exceto para gestantes,2,dia,12,hora,15,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A539,Sífilis não especificada,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A539,Sífilis não especificada,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,8,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A539,Sífilis não especificada,Ceftriaxona,1g,IV,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Sífilis latente tardia (mais de um ano de duração) ou latente com duração ignorada e sífilis terciária,A539,Sífilis não especificada,Ceftriaxona,1g,IM,10,para gestantes e não gestantes,1,dia,24,hora,10,dia
+Neurossífilis,A521,Neurossífilis sintomática,Penicilina cristalina,4 milhões UI/dose,IV,84,pode ser aplicado por infusão contínua,6,dia,4,hora,14,dia
+Neurossífilis,A521,Neurossífilis sintomática,Ceftriaxona,2g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+Neurossífilis,A521,Neurossífilis sintomática,Ceftriaxona,2g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+Neurossífilis,A522,Neurossífilis assintomática,Penicilina cristalina,4 milhões UI/dose,IV,84,pode ser aplicado por infusão contínua,6,dia,4,hora,14,dia
+Neurossífilis,A522,Neurossífilis assintomática,Ceftriaxona,2g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+Neurossífilis,A522,Neurossífilis assintomática,Ceftriaxona,2g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+Neurossífilis,A523,Neurossífilis não especificada,Penicilina cristalina,4 milhões UI/dose,IV,84,pode ser aplicado por infusão contínua,6,dia,4,hora,14,dia
+Neurossífilis,A523,Neurossífilis não especificada,Ceftriaxona,2g,IV,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+Neurossífilis,A523,Neurossífilis não especificada,Ceftriaxona,2g,IM,10,para gestantes e não gestantes,1,dia,24,hora,14,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A500,Sífilis congênita precoce sintomática,Penicilina cristalina,50.000 UI/kg/dose,IV,14,nos primeiros 7 dias de vida,2,dia,12,hora,7,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A500,Sífilis congênita precoce sintomática,Penicilina cristalina,50.000 UI/kg/dose,IV,30,após os 7 dias de vida,3,dia,8,hora,10,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A500,Sífilis congênita precoce sintomática,Penicilina G procaína,50.000 UI/kg,IM,10,-,1,dia,24,hora,10,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A502,Sífilis congênita precoce não especificada,Penicilina cristalina,50.000 UI/kg/dose,IV,14,nos primeiros 7 dias de vida,2,dia,12,hora,7,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A502,Sífilis congênita precoce não especificada,Penicilina cristalina,50.000 UI/kg/dose,IV,30,após os 7 dias de vida,3,dia,8,hora,10,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A502,Sífilis congênita precoce não especificada,Penicilina G procaína,50.000 UI/kg,IM,10,-,1,dia,24,hora,10,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A509,Sífilis congênita não especificada,Penicilina cristalina,50.000 UI/kg/dose,IV,14,nos primeiros 7 dias de vida,2,dia,12,hora,7,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A509,Sífilis congênita não especificada,Penicilina cristalina,50.000 UI/kg/dose,IV,30,após os 7 dias de vida,3,dia,8,hora,10,dia
+"RN de mãe não tratada ou tratada inadequadamente - Presença de alterações clínicas e/ou imunológicas e/ou radiológicas e/ou
+hematológicas",A510,Sífilis congênita não especificada,Penicilina G procaína,50.000 UI/kg,IM,10,-,1,dia,24,hora,10,dia

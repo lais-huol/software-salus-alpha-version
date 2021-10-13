@@ -1,0 +1,47 @@
+{% extends 'base_modal.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Sífilis: gestor de casos - {{ pessoa.nome }}</h3>
+{% endblock %}
+
+{% block conteudo %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sifilis:listar_por_pessoa' pessoa.pk %}">{{ pessoa }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Adicionar Relacionamento</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-header font-weight-bold">Paciente</div>
+                <div class="card-body">
+                    <label>Nome:</label> {{ pessoa.nome }}<br/>
+                    <label>CPF:</label> {{ pessoa.cpf }}<br/>
+                    <label>Nascimento:</label> {{ pessoa.data_de_nascimento }}<br/>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header font-weight-bold">Adicionar Relacionamento do Paciente</div>
+                {% if request.POST %}
+                    <p class="msg alert">Pessoa não encontrada.</p>
+                {% endif %}
+                <div class="card-body">
+                    <form action="" class="form" method="post"
+                          enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <input type="submit" id="submit" class="btn btn-primary ml-1"
+                               value="Salvar"/>
+                    </form>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+

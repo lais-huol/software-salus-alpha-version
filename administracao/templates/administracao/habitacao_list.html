@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags base_tags modal %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Habitações de Bairros' }}</h2>
+                <p>Abaixo você poderá gerir as habitações de bairros cadastradas no sistema.</p>
+                <p><a href="{% url 'administracao:cadastrar_habitacao' %}" class="btn btn-secondary">Criar habitação de bairro</a></p>
+
+                <div class="tablesaw-overflow">
+                    <table id="table-notificacoes" class="table table-centered">
+                        <thead>
+                        <tr>
+                            <th data-tablesaw-priority="persist">Nome da habitação de bairro</th>
+                            <th data-tablesaw-priority="persist">Bairro</th>
+                            <th data-tablesaw-priority="persist">Ação</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for habitacao in object_list %}
+                            <tr>
+                                <th scope="row">{{ habitacao.nome }}</th>
+                                <th scope="row">{{ habitacao.bairro.nome }}</th>
+                                <td>
+                                    <a href="{% url 'administracao:alterar_habitacao' habitacao.id %}" class="btn btn-primary">Editar</a>
+                                    <a href="{% url 'administracao:remover_habitacao' habitacao.id %}" class="btn btn-danger">Remover</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/tablesaw/tablesaw.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/datatables/dataTables.bootstrap4.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'libs/datatables/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.jquery.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.init.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select').select2();
+            $('table').dataTable({
+                stateSave: true,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.21/i18n/Portuguese-Brasil.json',
+                    paginate: {
+                        previous: "<i class='mdi mdi-chevron-left'>",
+                        next: "<i class='mdi mdi-chevron-right'>"
+                    }
+                },
+                drawCallback: function () {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                }
+            });
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

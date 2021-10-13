@@ -1,0 +1,10 @@
+{% block conteudo %}
+    {% autoescape off %}
+        {{ boletim }}
+    {% endautoescape %}
+{% endblock %}
+{% autoescape off %}
+    {% for script in scripts %}
+        {{ script|safe }}
+    {% endfor %}
+{% endautoescape %}

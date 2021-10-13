@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static crispy_forms_tags base_tags modal %}
+
+{% block conteudo %}
+    <div class="row" xmlns="http://www.w3.org/1999/html">
+        <div class="col-12">
+            <div class="card-box">
+                <h2>{{ titulo|default:'Óbitos' }}</h2>
+                <p>Abaixo você poderá buscar e visualizar os registros de Óbitos.</p>
+
+                <form>
+                    <div class="form-row">
+                        {% for field in form %}
+                            <div class="col-4">
+                                <label for="{{ field.id_for_label }}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field.as_widget }}
+                            </div>
+                        {% endfor %}
+                        <div class="col-3">
+                            <br/>
+                            <button type="submit" class="btn btn-secondary">Filtrar</button>
+                            <a class="btn btn-primary ml-2" href="{% url 'notificacoes:iniciar_registrar_obito'%}">Novo Óbito</a>
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                    </div>
+                </form>
+
+
+
+                <br/>
+                <div class="tablesaw-overflow">
+                    <table id="table-notificacoes" class="tablesaw tablesaw-columntoggle"
+                           data-tablesaw-mode="columntoggle"
+                           data-tablesaw-minimap>
+                        <thead>
+                        <tr>
+                            <th data-tablesaw-priority="persist">CPF</th>
+                            <th data-tablesaw-priority="persist">Nome</th>
+                            <th data-tablesaw-priority="persist">Data do Óbito</th>
+                            <th data-tablesaw-priority="persist">Número da Declaração de Óbito</th>
+                            <th data-tablesaw-priority="persist">Local do Óbito</th>
+                            <th data-tablesaw-priority="4">Resultado do teste</th>
+                            <th data-tablesaw-priority="5">Notificação</th>
+                            <th data-tablesaw-priority="6">Óbito por COVID-19?</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for obito in object_list %}
+                            <tr>
+                                <td>
+                                <span class="modal-trigger obito-detalhe-modal-trigger text-nowrap"
+                                      data-obito="{{ obito.pk }}"
+                                      data-target="{% url 'notificacoes:visualizar_obito' obito.pk %}">
+                                    <i class="fas fa-fw fa-search"></i> {{ obito.get_dados_pessoa.cpf|default:"vazio" }}
+                                    {% if notificacao.estah_encerrada %}
+                                    <br/>
+                                    <span class="badge badge-danger">encerrada</span>
+                                    {% endif %}
+                                </span>
+                            </td>
+                                <td>{{ obito.get_dados_pessoa.nome }}</td>
+                                <td>{{ obito.data_do_obito|date:"SHORT_DATE_FORMAT" }}</td>
+                                <td>{{ obito.numero_declaracao_obito }}</td>
+                                <td>{{ obito.local_do_obito|default:'---' }}</td>
+                                <td>{{ obito.resultado_do_teste_covid_19|default:'---' }}</td>
+                                <td>
+                                    {% if obito.notificacao %}
+                                        <span class="modal-trigger notificacao-detalhe-modal-trigger text-nowrap"
+                                              data-notificacao="{{ obito.notificacao.pk }}">
+                                            <i class="fas fa-fw fa-search"></i> {{ obito.notificacao.numero }}
+                                        </span>
+                                    {% else %} - {% endif %}
+                                </td>
+                                {% if obito.confirmado_covid19 != None %}
+                                    <td>{{ obito.confirmado_covid19|yesno|title }}</td>
+                                {% else %}
+                                    <td><a class="btn btn-danger btn-sm" href="{% url 'notificacoes:validar_obito' obito.id %}">Informar</a></td>
+                                {% endif %}
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <p>Mostrando de <strong>{{ page_obj.start_index }}</strong> até
+                            <strong>{{ page_obj.end_index }}</strong> de <strong>{{ paginator.count }}</strong>
+                            registros</p>
+                    </div>
+                    <div class="col-8">
+                        {% include 'paginator.html' %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'libs/select2/select2.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'libs/tablesaw/tablesaw.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <!-- Datatables -->
+    <script src="{% static 'libs/select2/select2.min.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.jquery.js' %}"></script>
+    <script src="{% static 'libs/tablesaw/tablesaw.init.js' %}"></script>
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('select').select2();
+            reloadTriggers();
+        });
+    </script>
+{% endblock scripts %}

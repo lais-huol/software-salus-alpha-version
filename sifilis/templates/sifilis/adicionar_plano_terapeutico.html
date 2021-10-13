@@ -1,0 +1,81 @@
+{% extends 'base_modal.html' %}
+{% load i18n static crispy_forms_tags bootstrap %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Sífilis: gestor de casos - {{ pessoa.nome }}</h3>
+{% endblock %}
+
+{% block conteudo %}
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'sifilis:listar_por_pessoa' pessoa.pk %}">{{ pessoa }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Adicionar Plano Terapêutico</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-header font-weight-bold">Paciente</div>
+                <div class="card-body">
+                    <label>Nome:</label> {{ pessoa.nome }}<br/>
+                    <label>CPF:</label> {{ pessoa.cpf }}<br/>
+                    <label>Nascimento:</label> {{ pessoa.data_de_nascimento }}<br/>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header font-weight-bold">Adicionar Plano Terapêutico ao Paciente</div>
+                {% if cid %}
+                    <div class="card-body">
+                        <label>CID:</label> {{ cid }} <a class="ml-1 btn btn-outline-danger"
+                                                         href="{% url 'sifilis:adicionar_plano_terapeutico' pessoa.pk %}">Trocar
+                        CID</a>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <form action="" class="form" method="post"
+                          enctype="multipart/form-data">{% csrf_token %}
+                        {% if passo == 2 %}
+                            <table class="table">
+                                <tr>
+                                    <td colspan="4">
+                                        Escolha o plano terapêutico abaixo
+                                    </td>
+                                </tr>
+                                {% for pt in planos_terapeuticos %}
+                                    <tr>
+                                        <td><input type="radio" name="plano_terapeutico" value="{{ pt.pk }}"
+                                                   id="plano_terapeutico_{{ pt.pk }}"></td>
+                                        <td><label for="plano_terapeutico_{{ pt.pk }}">{{ pt.nome }}</label></td>
+                                        <td>{{ pt.medicamento.nome }} {{ pt.medicamento.metodo }} {{ pt.medicamento.solucao }}</td>
+                                        <td>
+                                            {{ pt.get_invervalo_entre_doses_em_horas_display }} |
+                                            {{ pt.qtd_doses }} doses |
+                                            prazo extra de {{ pt.get_prazo_extra_em_dias }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="4" class="alert-warning">
+                                        Deseja <a
+                                            href="{% url 'sifilis:adicionar_novo_plano_terapeutico_e_vincular_ao_paciente' pessoa.pk cid.pk %}"
+                                            class="alert-link">criar um novo plano terapêutico para {{ cid }}</a>?
+                                    </td>
+                                </tr>
+                            </table>
+                            <input type="submit" id="submit" class="btn btn-primary ml-1" value="Confirmar"/>
+                        {% else %}
+                            {{ form|crispy }}
+                            <input type="submit" id="submit" class="btn btn-primary ml-1"
+                                   value="Mostrar Planos Terapêuticos"/>
+                        {% endif %}
+                    </form>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+

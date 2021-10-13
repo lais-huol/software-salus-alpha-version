@@ -1,0 +1,89 @@
+{% extends 'base_modal.html' %}
+{% load base_tags modal static %}
+
+{% block cabecalho %}
+    <h3 class="modal-title">Óbito - {{ object.pessoa.nome}}</h3>
+{% endblock %}
+
+{% block conteudo %}
+    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active"
+               id="pills-obito-tab"
+               href="#pills-obito"
+               data-toggle="pill"
+               role="tab">
+                Dados do Óbito
+            </a>
+
+        </li>
+        {% if object.notificacao %}
+            <li>
+                <a class="nav-link"
+               id="pills-sivepgripe-tab"
+               href="#pills-sivepgripe"
+               data-toggle="pill"
+               role="tab">
+                Dados SIVEP GRIPE
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane show active" id="pills-obito" role="tabpanel">
+            <div class="card mb-1">
+                <div class="card-body">
+                    <h4>Dados do Óbito</h4>
+                    <div class="row">
+                        {% campo_modal 'Data do óbito' object.data_do_obito %}
+                        {% campo_modal 'Número da Declaração' object.numero_declaracao_obito|default_if_none:'---' %}
+                        {% campo_modal 'Local do Óbito' obito.local_do_obito.nome|default_if_none:'Domícilio' %}
+                        {% campo_modal 'Resultado do Teste para COVID-19' object.resultado_do_teste_covid_19 %}
+                        {% campo_modal 'Validado' object.confirmado_covid19|yesno:'Sim,Não'  %}
+                    </div>
+                {% if object.arquivo_declaracao_obito or object.resultado_do_teste_covid_19 %}
+                    <h4>Arquivos</h4>
+                    {% if object.arquivo_declaracao_obito %}
+                    <div class="row col-4">
+                        <a  target="_blank" href="/media/{{ object.arquivo_declaracao_obito }}">Visualizar Declaração de Óbito</a>
+                    </div>
+                    {% endif %}
+                {% if object.arquivo_resultado_exame_covid19 %}
+                    <div class="row col-4">
+                        <a target="_blank"  href="/media/{{ object.arquivo_resultado_exame_covid19 }}">Visualizar Resultado do Exame - COVID19</a>
+                    </div>
+                {% endif %}
+                {% endif %}
+
+
+                </div>
+            </div>
+        </div>
+        {% if object.notificacao %}
+            <div class="tab-pane fade" id="pills-sivepgripe" role="tabpanel">
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <h4>Notificação SIVEP GRIPE {{ object.notificacao.numero }}</h4>
+                        <div id="json-dados" class="json-view"></div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'rest_framework/docs/css/jquery.json-view.min.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'rest_framework/docs/js/jquery.json-view.min.js' %}"></script>
+    <script src="{% static 'rest_framework/docs/js/highlight.pack.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#json-dados_sivepgripe").jsonView({{ object.notificacao.dados|asjson|safe }});
+        });
+    </script>
+{% endblock scripts %}

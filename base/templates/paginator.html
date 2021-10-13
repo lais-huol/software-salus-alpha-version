@@ -1,0 +1,42 @@
+{% load base_tags %}
+
+<nav>
+    <ul class="pagination pagination-rounded mb-3">
+
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.previous_page_number %}"><i
+                    class="fa fa-chevron-left"
+                    aria-hidden="true"></i></a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link"><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
+        {% endif %}
+
+        {% if page_obj.number|add:'-3' > 1 %}
+            <li class="page-item paginate_button"><a class="page-link" href="?{% url_replace page=1 %}">1</a></li>
+            <li class="page-item paginate_button"><a class="page-link" href="?{% url_replace page=page_obj.number|add:'-4' %}">&hellip;</a></li>
+        {% endif %}
+
+        {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li class="page-item paginate_button active"><span class="page-link">{{ i }} <span
+                        class="sr-only">(atual)</span></span></li>
+            {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
+                <li class="page-item paginate_button"><a class="page-link" href="?{% url_replace page=i %}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.paginator.num_pages > page_obj.number|add:'3' %}
+            <li class="page-item paginate_button"><a class="page-link" href="?{% url_replace page=page_obj.number|add:'4' %}">&hellip;</a></li>
+            <li class="page-item paginate_button"><a class="page-link" href="?{% url_replace page=page_obj.paginator.num_pages %}">{{page_obj.paginator.num_pages}}</a></li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?{% url_replace page=page_obj.next_page_number %}"><i
+                    class="fa fa-chevron-right"
+                    aria-hidden="true"></i></a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link"><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+        {% endif %}
+
+    </ul>
+</nav>

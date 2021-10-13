@@ -1,0 +1,78 @@
+asgiref==3.2.7
+beautifulsoup4==4.9.1
+bs4==0.0.1
+certifi==2020.4.5.1
+chardet==3.0.4
+click==7.1.2
+Django==3.0.10
+django-bootstrap-form==3.4
+django-braces==1.14.0
+django-choices==1.7.1
+django-crispy-forms==1.9.1
+django-cron==0.5.1
+django-extensions==2.2.9
+django-formtools==2.2
+django-localflavor==3.0.1
+django-loginas==0.3.8
+django-notifications-hq==1.6.0
+django-redis==4.12.1
+django-richtextfield==1.6
+djangorestframework==3.11.0
+djangorestframework-datatables==0.5.2
+et-xmlfile==1.0.1
+geocoder==1.38.1
+gunicorn==20.0.4
+idna==2.9
+jdcal==1.4.1
+jellyfish==0.8.2
+numpy==1.18.4
+openpyxl==3.0.3
+pandas==1.0.4
+psycopg2-binary==2.8.5
+pycryptodome==3.9.7
+python-dateutil==2.8.1
+python-highcharts==0.4.2
+python-Levenshtein-wheels==0.13.1
+python-stdnum==1.13
+pytz==2020.1
+requests==2.23.0
+requests-html==0.10.0
+six==1.15.0
+sortedcontainers==2.1.0
+soupsieve==2.0.1
+sqlparse==0.3.1
+urllib3==1.25.9
+sentry-sdk==0.14.4
+whitenoise==5.1.0
+epiweeks==2.1.2
+django-filter==2.3.0
+xlsxwriter==1.2.9
+django-select2==7.4.2
+elasticsearch==7.8.0
+memory-profiler==0.57.0
+
+
+
+
+
+
+#REDIS
+redis==3.5.3
+dbfread==2.0.7
+
+
+
+
+
+#brew install redis
+#Rodar o servidor REDIS: redis-server
+#Cliente: redis-cli -n 1
+#- Listar o cache: KEYS *
+#- Limpar o cache: FLUSHDB
+
+
+#Jupyter
+#pip install jupyter
+#env DJANGO_ALLOW_ASYNC_UNSAFE=true ./manage.py shell_plus --notebook
+#import os; os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+

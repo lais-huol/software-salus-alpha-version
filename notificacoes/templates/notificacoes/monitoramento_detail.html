@@ -1,0 +1,21 @@
+{% load base_tags %}
+<div class="modal-header">
+    <h3 class="modal-title" id="exampleModalLabel">{{ object }}</h3>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row">
+        {% for k, v in object.dados.items %}
+            <div class="col-4">
+                <div class="form-group">
+                    <label class="control-label">{{ k }}</label>
+                    <div>
+                        <span>{{ v|default_if_none:'---' }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
